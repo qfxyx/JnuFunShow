@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <liangbin.funshow.manage.ActivityTilte
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </liangbin.funshow.manage.ActivityTilte>
+    <TextView
+        android:textSize="15sp"
+        android:textColor="#0000CD"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:id="@+id/class_schedule_welcome_results"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="欢迎你"/>
+    <TextView
+        android:textSize="12sp"
+        android:gravity="center"
+        android:layout_marginTop="0dp"
+        android:id="@+id/class_schedule_time_results"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="2015-2016学年第一学期"/>
+
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#A2B5CD">
+
+        <Button
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:id="@+id/class_schedule_query_today_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/log_in_shape"
+            android:text="今天课表"/>
+
+
+        <Button
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:id="@+id/class_schedule_query_all_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/log_in_shape"
+            android:text="本学期课程表"/>
+        <Button
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center"
+            android:id="@+id/class_schedule_query_exam_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/log_in_shape"
+            android:text="考试表"/>
+        </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FAFAD2">
+        <Button
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:id="@+id/class_schedule__storeClassResults_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/log_in_shape"
+            android:text="课程表更新"/>
+        <Button
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center"
+            android:id="@+id/class_schedule__storeExamResults_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/log_in_shape"
+            android:text="考试表更新"/>
+
+    </LinearLayout>
+
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp">
+        <TextView
+            android:id="@+id/class_schedule_query_results"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ScrollView>
+
+</LinearLayout>

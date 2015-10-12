@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFF">
+
+    <liangbin.funshow.manage.ActivityTilte
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </liangbin.funshow.manage.ActivityTilte>
+
+    <ScrollView
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/show_results_text"
+            android:textSize="18sp"
+            android:textColor="#000"/>
+    </ScrollView>
+
+</LinearLayout>

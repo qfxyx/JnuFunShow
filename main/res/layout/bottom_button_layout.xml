@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        >
+        <Button
+            android:id="@+id/fusnhow"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textAllCaps="false"
+            android:text="FunShow"/>
+
+
+        <Button android:id="@+id/message"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:textAllCaps="false"
+            android:text="信息港湾" />
+
+        <Button android:id="@+id/jusfun"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:textAllCaps="false"
+            android:text="Just Fun"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

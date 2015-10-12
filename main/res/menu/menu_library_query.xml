@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="liangbin.funshow.activity.LibraryQueryActivity">
+    <item
+        android:id="@+id/back_key"
+        android:title="@string/back"
+        android:orderInCategory="101"
+        app:showAsAction="never"/>
+</menu>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <liangbin.funshow.manage.ActivityTilte
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </liangbin.funshow.manage.ActivityTilte>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="0"
+        android:layout_marginTop="10dp">
+        <TableRow>
+
+            <EditText
+                android:inputType="number"
+                android:gravity="center"
+                android:id="@+id/grades_account"
+                android:hint="请输入你的你的学号"/>
+        </TableRow>
+        <TableRow>
+
+            <EditText
+                android:gravity="center"
+                android:inputType="textPassword"
+                android:id="@+id/grades_password"
+                android:hint="请输入你教务处帐户的密码"/>
+        </TableRow>
+        <LinearLayout android:layout_marginTop="10dp">
+            <ImageView
+                android:id="@+id/grades_validate_image"
+                android:layout_width="75dp"
+                android:layout_height="42dp" />
+            <EditText
+                android:digits="0123456789abcdefghigklmnopqrst
+                uvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                android:inputType="text"
+                android:id="@+id/grades_validate_code"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="输入验证码，点击图片可刷新"
+                android:layout_weight="1"/>
+
+
+        </LinearLayout>
+    </TableLayout>
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp">
+        <CheckBox
+            android:layout_marginLeft="100dp"
+            android:id="@+id/grades_remember_checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textColor="#00F"
+            android:gravity="center"
+            android:text="记住我"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <Button
+        android:layout_gravity="center"
+        android:id="@+id/grades_query_button"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/log_in_shape"
+        android:text="查询"/>
+    <Button
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
+        android:id="@+id/grades_test_button"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/log_in_shape"
+        android:text="Test"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp">
+        <TextView
+            android:id="@+id/grades_results"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ScrollView>
+
+
+</LinearLayout>

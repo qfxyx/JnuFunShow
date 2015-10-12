@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:background="#2B2B2B">
+
+        <Button
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/returnpic2"
+            android:id="@+id/activity_title_button"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            />
+        <TextView
+            android:id="@+id/activity_title_text"
+            android:textColor="#FFF"
+            android:layout_marginLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_gravity="center"
+            android:textSize="25sp"
+            android:text="FunShow"
+            android:textAllCaps="false"/>
+
+
+</LinearLayout>

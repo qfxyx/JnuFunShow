@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <liangbin.funshow.manage.ActivityTilte
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </liangbin.funshow.manage.ActivityTilte>
+
+    <TableLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:stretchColumns="1">
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="20sp"
+                android:text="身份证号 :"/>
+            <EditText
+                android:id="@+id/cet_ticket_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="你的完整身份证号码"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:text="考生姓名 :"
+                android:textSize="20sp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+
+            <EditText
+                android:id="@+id/cet_name"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:hint="你的姓名"/>
+        </LinearLayout>
+
+    </TableLayout>
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp">
+    <CheckBox
+        android:layout_marginLeft="90dp"
+        android:id="@+id/cet_remember_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="记住我"/>
+    </LinearLayout>
+    <Button
+        android:background="@drawable/log_in_shape"
+        android:layout_marginTop="10dp"
+        android:id="@+id/cet_query_button"
+        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_gravity="center"
+        android:text="查询"/>
+    <ScrollView
+        android:layout_marginTop="25dp"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/cet_result"
+            android:textSize="15sp"/>
+
+
+    </ScrollView>
+
+</LinearLayout>

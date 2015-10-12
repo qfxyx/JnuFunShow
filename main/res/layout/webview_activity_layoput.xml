@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#2B2B2B">
+            <Button
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/webView_close_button"
+                android:layout_marginLeft="10dp"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:background="@drawable/close_button"/>
+            <Button
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/webView_back_button"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:background="@drawable/back_button"
+
+                />
+            <Button
+                android:id="@+id/webView_forward_button"
+                android:gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/forword"/>
+            <TextView
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="#FFF"
+                android:id="@+id/webView_title_text"
+                android:textSize="20sp"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="FunShow"/>
+            <Button
+                android:id="@+id/webView_reflesh_button"
+                android:gravity="center"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/reflesh"/>
+            <Button
+                android:id="@+id/webView_share_button"
+                android:gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="33dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/share"/>
+        </LinearLayout>
+        <ProgressBar
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:id="@+id/webview_progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
+        <WebView
+            android:id="@+id/fusnhow_webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+
+</FrameLayout>

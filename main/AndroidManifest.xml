@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="liangbin.funshow" >
+    <permission android:protectionLevel="normal" android:name="cn.bmob.permission.push"></permission>
+    <uses-permission android:name="cn.bmob.permission.push"/><!-- 添加自定义的权限-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
+
+    <!--
+    注意 注意 注意 android:theme若使用AppTheme，ActionBar Tab
+    导航会引发空指针异常，奶奶的，这个问题搞了我好几天
+    -->
+    <application
+        android:name=".manage.MyApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/funshow"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activity.MessageActivity" >
+        </activity>
+
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:hardwareAccelerated="true" >
+        </activity>
+
+        <activity
+            android:theme="@style/Base.Theme.AppCompat.Light"
+            android:name=".activity.CetEntranceChoose">
+        </activity>
+
+        <activity
+            android:theme="@style/Base.Theme.AppCompat.Light"
+            android:name=".activity.CetQueryByAdmissionNumActivity">
+        </activity>
+
+        <activity
+            android:name=".activity.CetQueryActivity"
+            android:theme="@style/Base.Theme.AppCompat.Light" >
+        </activity>
+
+        <activity
+            android:theme="@style/Base.Theme.AppCompat.Light"
+            android:name=".activity.NotificationActivity" >
+        </activity>
+
+        <activity
+            android:name=".activity.ScoreQueryActivity"
+            android:theme="@style/Base.Theme.AppCompat.Light" >
+        </activity>
+
+        <activity
+            android:name=".activity.CampusNetActivity"
+            android:theme="@style/Base.Theme.AppCompat.Light" >
+        </activity>
+
+        <activity android:name=".activity.ShowResultsActivity" >
+        </activity>
+
+        <activity
+            android:theme="@style/Base.Theme.AppCompat.Light"
+            android:name=".activity.LibraryQueryActivity"
+             >
+        </activity>
+
+        <activity
+            android:name=".activity.GradesActivity"
+            android:theme="@style/Base.Theme.AppCompat.Light">
+        </activity>
+
+        <activity
+            android:theme="@style/Base.Theme.AppCompat.Light"
+            android:name=".activity.ClassScheduleActivity">
+        </activity>
+
+        <activity
+            android:theme="@style/Base.Theme.AppCompat.Light"
+            android:name=".activity.TestActivity">
+        </activity>
+
+        <activity
+        android:theme="@style/Base.Theme.AppCompat.Light"
+        android:name=".activity.NotificationTeachingActivity">
+    </activity>
+        <activity
+            android:theme="@style/Base.Theme.AppCompat.Light"
+            android:name=".activity.NotificationStudentActivity">
+        </activity>
+
+        <activity
+            android:theme="@style/Base.Theme.AppCompat.Light"
+            android:name=".activity.NotificationCampusActivity">
+        </activity>
+
+        <activity android:name=".activity.ShowPushTextActivity"
+            android:theme="@style/Base.Theme.AppCompat.Light">
+        </activity>
+        <service
+            android:label="PushService"
+            android:name="cn.bmob.push.lib.service.PushService"
+            android:process="cn.bmob.push"
+            android:permission="cn.bmob.permission.push"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="cn.bmob.push.lib.service.PushService"/>
+            </intent-filter>
+        </service>
+        <receiver android:name="cn.bmob.push.PushReceiver">
+            <intent-filter android:priority="2147483647"><!--优先级加最高-->
+                <!-- 系统启动完成后会调用 -->
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <!-- 解锁完成后会调用 -->
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <!-- 监听网络连通性 -->
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name="liangbin.funshow.manage.MyPushMessageReceiver">
+            <intent-filter >
+                <action android:name="cn.bmob.push.action.MESSAGE"/>
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>
