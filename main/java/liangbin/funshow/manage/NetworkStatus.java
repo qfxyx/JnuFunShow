@@ -16,7 +16,7 @@ public  class NetworkStatus {
             getSystemService(Context.CONNECTIVITY_SERVICE);
      NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
 
-    private final  String noNetworkTips="网络不可用，请稍后再试！";
+    private final  String noNetworkTips="网络链接不可用，请稍后再试！";
 
     public NetworkStatus(){
     }
