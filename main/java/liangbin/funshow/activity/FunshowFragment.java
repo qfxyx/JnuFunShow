@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.NetworkStatus;
 import liangbin.funshow.manage.TitleListAdapter;
 import liangbin.funshow.manage.TitleListView;
 
@@ -62,38 +63,50 @@ public class FunshowFragment extends android.support.v4.app.Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TitleListView titleListView=titleList.get(position);
+                NetworkStatus networkStatus=new NetworkStatus();
                 switch (position){
                     case 0:
-                        Intent intent1=new Intent(getActivity(),WebViewActivity.class);
-                        intent1.putExtra("links",funshowHogepage);
-                        //定义一个名为what的String给处理此链接的Activity,否则会引起空指针异常。
-                        //这是因为在WebViewActivity中会接收该数据,下同
-                        intent1.putExtra("what","noNeedThis");
-                        intent1.putExtra("title","FunShow");
-                        startActivity(intent1);
+                        if (networkStatus.canConntect()){
+                            Intent intent1=new Intent(getActivity(),WebViewActivity.class);
+                            intent1.putExtra("links",funshowHogepage);
+                            //定义一个名为what的String给处理此链接的Activity,否则会引起空指针异常。
+                            //这是因为在WebViewActivity中会接收该数据,下同
+                            intent1.putExtra("what","noNeedThis");
+                            intent1.putExtra("title","FunShow");
+                            startActivity(intent1);
+                        }
                         break;
-                    case 1:
 
-                        Intent intent2 =new Intent(getActivity(),WebViewActivity.class);
-                        intent2.putExtra("links",CampusTrends);
-                        intent2.putExtra("what","noNeedThis");
-                        intent2.putExtra("title","FunShow");
-                        startActivity(intent2);
+                    case 1:
+                        if (networkStatus.canConntect()){
+                            Intent intent2 =new Intent(getActivity(),WebViewActivity.class);
+                            intent2.putExtra("links",CampusTrends);
+                            intent2.putExtra("what","noNeedThis");
+                            intent2.putExtra("title","FunShow");
+                            startActivity(intent2);
+                        }
                         break;
+
                     case 2:
-                        Intent intent3 =new Intent(getActivity(),WebViewActivity.class);
-                        intent3.putExtra("links",JobMarket);
-                        intent3.putExtra("title","FunShow");
-                        intent3.putExtra("what","noNeedThis");
-                        startActivity(intent3);
+                        if (networkStatus.canConntect()){
+                            Intent intent3 =new Intent(getActivity(),WebViewActivity.class);
+                            intent3.putExtra("links",JobMarket);
+                            intent3.putExtra("title","FunShow");
+                            intent3.putExtra("what","noNeedThis");
+                            startActivity(intent3);
+                        }
                         break;
+
                     case 3:
-                        Intent intent4 =new Intent(getActivity(),WebViewActivity.class);
-                        intent4.putExtra("links",SecondHand);
-                        intent4.putExtra("title","FunShow");
-                        intent4.putExtra("what","noNeedThis");
-                        startActivity(intent4);
+                        if (networkStatus.canConntect()){
+                            Intent intent4 =new Intent(getActivity(),WebViewActivity.class);
+                            intent4.putExtra("links",SecondHand);
+                            intent4.putExtra("title","FunShow");
+                            intent4.putExtra("what","noNeedThis");
+                            startActivity(intent4);
+                        }
                         break;
+
                     default:
                         break;
 

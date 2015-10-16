@@ -27,6 +27,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,6 +41,7 @@ import java.util.List;
 
 import liangbin.funshow.R;
 import liangbin.funshow.manage.MyApplication;
+import liangbin.funshow.manage.NetworkStatus;
 
 /**
  * Created by Administrator on 2015/8/18.
@@ -64,6 +68,7 @@ public class CampusNetActivity extends Activity {
     int select=1;
     String response;
     final int SHOW_NET_IMFORMATION=1;
+    final int CONNECTED_TIME_OUT=2;
     HttpClient httpClient;
     Handler handler=new Handler(){
         public void handleMessage(Message msg){
@@ -89,6 +94,14 @@ public class CampusNetActivity extends Activity {
 
                     }
                     select=1;
+                    break;
+
+                case CONNECTED_TIME_OUT:
+                    progressDialog.dismiss();
+                    AlertDialog.Builder builder=new AlertDialog.Builder(CampusNetActivity.this)
+                            .setTitle("连接超时").setMessage("连接超时，请检查你的网络状态是否通畅"
+                            +"或尝试更换网络环境，稍后再试");
+                    setPositiveButton(builder).create().show();
                     break;
                 default:
                     break;
@@ -121,26 +134,30 @@ public class CampusNetActivity extends Activity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                number=numberEditText.getText().toString();
-                name=nameEditText.getText().toString();
-                if (name.equals("")||number.equals("")){
-                    //AlertDialog.Builder builder=new AlertDialog.Builder(this).setTitle("").
-                           // setIcon(R.mipmap.ic_launcher).setMessage("");
-                    Toast.makeText(MyApplication.getContext(),"输入不能留空",
-                            Toast.LENGTH_LONG).show();
-                }else {
-                    editor=sharedPreferences.edit();
-                    if (checkBox.isChecked()){
-                        editor.putBoolean("NetRemember",true);
-                        editor.putString("NetStoreName",name);
-                        editor.putString("NetStoreNum",number);
+                NetworkStatus networkStatus =new NetworkStatus();
+                if (networkStatus.canConntect()){
+                    number=numberEditText.getText().toString();
+                    name=nameEditText.getText().toString();
+                    if (name.equals("")||number.equals("")){
+                        //AlertDialog.Builder builder=new AlertDialog.Builder(this).setTitle("").
+                        // setIcon(R.mipmap.ic_launcher).setMessage("");
+                        Toast.makeText(MyApplication.getContext(),"输入不能留空",
+                                Toast.LENGTH_LONG).show();
                     }else {
-                        editor.clear();
+                        editor=sharedPreferences.edit();
+                        if (checkBox.isChecked()){
+                            editor.putBoolean("NetRemember",true);
+                            editor.putString("NetStoreName",name);
+                            editor.putString("NetStoreNum",number);
+                        }else {
+                            editor.clear();
+                        }
+                        editor.commit();
+                        createProgressDialog();
+                        queryNetImfo();
                     }
-                    editor.commit();
-                    createProgressDialog();
-                    queryNetImfo();
                 }
+
             }
         });
     }
@@ -152,6 +169,11 @@ public class CampusNetActivity extends Activity {
 
                 httpClient=new DefaultHttpClient();
                 HttpPost httpPost= new HttpPost("http://netcweb.jnu.edu.cn/renew/login.asp");
+                //设置连接超时
+                HttpParams httpParams=new BasicHttpParams();
+                HttpConnectionParams.setConnectionTimeout(httpParams,3000);
+                HttpConnectionParams.setSoTimeout(httpParams,3000);
+                httpPost.setParams(httpParams);
                 List<NameValuePair> params =new ArrayList<NameValuePair>();
                 HttpResponse httpResponse;
                 params.add(new BasicNameValuePair("id_num",number));
@@ -168,6 +190,9 @@ public class CampusNetActivity extends Activity {
                     handler.sendMessage(message);
 
                 }catch (Exception e){
+                    Message message=new Message();
+                    message.what=CONNECTED_TIME_OUT;
+                    handler.sendMessage(message);
                     e.printStackTrace();
                 }
 

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.NetworkStatus;
 
 /**
  * Created by Administrator on 2015/8/26.
@@ -33,6 +34,7 @@ public class DiscoveryFragment extends Fragment {
     String busTimatable="http://1.funshow.sinaapp.com/bus/";
     String games="http://1.funshow.sinaapp.com/game/index.php";
     String funshowHis=" http://1.funshow.sinaapp.com/history/index.html";
+    String schoolMap="http://1.funshow.sinaapp.com/map/map.html";
    // SimpleAdapter simpleAdapter;
     List<Map<String,Object>> listItems1;
     List<Map<String,Object>> listItems2;
@@ -77,25 +79,30 @@ public class DiscoveryFragment extends Fragment {
         listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                NetworkStatus networkStatus=new NetworkStatus();
                 switch (position){
                     case 0:
-
-                        Intent intent0=new Intent(getActivity(),WebViewActivity.class);
-                        intent0.putExtra("links",funshowHis);
-                        intent0.putExtra("what","");
-                        intent0.putExtra("title","精彩Funhow");
-                        intent0.putExtra("whatMsg","");
-                        startActivity(intent0);
+                        if (networkStatus.canConntect()){
+                            Intent intent0=new Intent(getActivity(),WebViewActivity.class);
+                            intent0.putExtra("links",funshowHis);
+                            intent0.putExtra("what","");
+                            intent0.putExtra("title","精彩Funhow");
+                            intent0.putExtra("whatMsg","");
+                            startActivity(intent0);
+                        }
                         break;
+
                     case 1:
-                        Intent intent1=new Intent(getActivity(),WebViewActivity.class);
-                        intent1.putExtra("links",JnuBoard);
-                        intent1.putExtra("what","");
-                        intent1.putExtra("title","请大胆表达吧");
-                        intent1.putExtra("whatMsg","");
-                        startActivity(intent1);
-
+                        if (networkStatus.canConntect()){
+                            Intent intent1=new Intent(getActivity(),WebViewActivity.class);
+                            intent1.putExtra("links",JnuBoard);
+                            intent1.putExtra("what","");
+                            intent1.putExtra("title","请大胆表达吧");
+                            intent1.putExtra("whatMsg","");
+                            startActivity(intent1);
+                        }
                         break;
+
                     default:
                         break;
                 }
@@ -110,21 +117,27 @@ public class DiscoveryFragment extends Fragment {
         listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
+                NetworkStatus networkStatus = new NetworkStatus();
+                switch (position) {
                     case 0:
-                        Intent intent0=new Intent(getActivity(),WebViewActivity.class);
-                        intent0.putExtra("links",busTimatable);
-                        intent0.putExtra("what","");
-                        intent0.putExtra("title","校车时刻表");
-                        intent0.putExtra("whatMsg","");
-                        startActivity(intent0);
-
+                        if (networkStatus.canConntect()) {
+                            Intent intent0 = new Intent(getActivity(), WebViewActivity.class);
+                            intent0.putExtra("links", busTimatable);
+                            intent0.putExtra("what", "");
+                            intent0.putExtra("title", "校车时刻表");
+                            intent0.putExtra("whatMsg", "");
+                            startActivity(intent0);
+                        }
                         break;
                     case 1:
-
-                        Toast.makeText(getActivity(),"This page is still on developing..."
-                                ,Toast.LENGTH_SHORT).show();
-
+                        if (networkStatus.canConntect()) {
+                            Intent intent1=new Intent(getActivity(),WebViewActivity.class);
+                            intent1.putExtra("links",schoolMap);
+                            intent1.putExtra("what","");
+                            intent1.putExtra("title","各校区地图");
+                            intent1.putExtra("whatMsg","");
+                            startActivity(intent1);
+                        }
                         break;
                     default:
                         break;
@@ -141,19 +154,23 @@ public class DiscoveryFragment extends Fragment {
         listView3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
-                    case 0:
-                        Intent intent0=new Intent(getActivity(),WebViewActivity.class);
-                        intent0.putExtra("links",games);
-                        intent0.putExtra("what","");
-                        intent0.putExtra("title","来玩个小游戏吧");
-                        intent0.putExtra("whatMsg","");
-                        startActivity(intent0);
+                NetworkStatus networkStatus = new NetworkStatus();
+                if (networkStatus.canConntect()) {
+                    switch (position) {
+                        case 0:
+                            Intent intent0 = new Intent(getActivity(), WebViewActivity.class);
+                            intent0.putExtra("links", games);
+                            intent0.putExtra("what", "");
+                            intent0.putExtra("title", "来玩个小游戏吧");
+                            intent0.putExtra("whatMsg", "");
+                            startActivity(intent0);
 
-                        break;
-                    default:
-                        break;
+                            break;
+                        default:
+                            break;
+                    }
                 }
+
             }
         });
         return view;

@@ -27,6 +27,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.NetworkStatus;
 
 /**
  * Created by Administrator on 2015/8/24.
@@ -38,6 +39,7 @@ public class CetQueryByAdmissionNumActivity extends Activity {
     EditText numEditText;
     TextView textView;
     final int SHOW_RESULTS=1;
+    final int CONNECT_TIMEOUT=2;
     ProgressDialog progressDialog;
     int resultsLength=0;
     SharedPreferences sharedPreferences;
@@ -69,6 +71,16 @@ public class CetQueryByAdmissionNumActivity extends Activity {
                     }
                     resultsLength=0;
                     stringBuilder.delete(0,stringBuilder.length());
+                    break;
+                case CONNECT_TIMEOUT:
+                    progressDialog.dismiss();
+                    AlertDialog.Builder builder=new AlertDialog.Builder
+                            (CetQueryByAdmissionNumActivity.this)
+                            .setTitle("连接超时")
+                            .setMessage("请检查网络是否正常或更换网络环境，稍后再试！");
+                     setPositiveButton(builder).create().show();
+
+                    break;
 
                 default:
                     break;
@@ -101,22 +113,25 @@ public class CetQueryByAdmissionNumActivity extends Activity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (numEditText.getText().toString().length()!=15){
-                    AlertDialog.Builder builder=new AlertDialog.Builder
-                            (CetQueryByAdmissionNumActivity.this)
-                            .setTitle("输入错误")
-                            .setMessage("请正确输入15位准考证号！");
-                    setPositiveButton(builder).create().show();
-                }else if (nameEditText.getText().toString().isEmpty()){
-                    AlertDialog.Builder builder=new AlertDialog.Builder
-                            (CetQueryByAdmissionNumActivity.this)
-                            .setTitle("输入错误")
-                            .setMessage("请输入姓名！");
-                    setPositiveButton(builder).create().show();
-                }else {
-                    rememberMe();
-                    createProgressDialog();
-                    queryCet();
+                NetworkStatus networkStatus=new NetworkStatus();
+                if(networkStatus.canConntect()){
+                    if (numEditText.getText().toString().length()!=15){
+                        AlertDialog.Builder builder=new AlertDialog.Builder
+                                (CetQueryByAdmissionNumActivity.this)
+                                .setTitle("输入错误")
+                                .setMessage("请正确输入15位准考证号！");
+                        setPositiveButton(builder).create().show();
+                    }else if (nameEditText.getText().toString().isEmpty()){
+                        AlertDialog.Builder builder=new AlertDialog.Builder
+                                (CetQueryByAdmissionNumActivity.this)
+                                .setTitle("输入错误")
+                                .setMessage("请输入姓名！");
+                        setPositiveButton(builder).create().show();
+                    }else {
+                        rememberMe();
+                        createProgressDialog();
+                        queryCet();
+                    }
                 }
             }
         });
@@ -134,6 +149,7 @@ public class CetQueryByAdmissionNumActivity extends Activity {
                 try {
                     URL url = new URL("http://cet.99sushe.com/find");
                     URLConnection connection = url.openConnection();
+                    connection.setConnectTimeout(3000);
                     connection.setRequestProperty("User-Agent", " Mozilla/5.0 " +
                             "(Windows NT 5.1; rv:14.0) Gecko/20100101 Firefox/14.0.1");
                     connection.setRequestProperty("Accept", " text/html,application/xhtml+xml," +
@@ -186,6 +202,10 @@ public class CetQueryByAdmissionNumActivity extends Activity {
 
 
                 } catch (Exception e) {
+                    Message message=new Message();
+                    message.what=CONNECT_TIMEOUT;
+                    handler.sendMessage(message);
+
                     e.printStackTrace();
                 } finally {
                     try {

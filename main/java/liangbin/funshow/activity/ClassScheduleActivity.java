@@ -11,10 +11,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -32,6 +34,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -47,6 +52,7 @@ import java.util.TimeZone;
 import liangbin.funshow.R;
 import liangbin.funshow.manage.FunShowDatabaseHelper;
 import liangbin.funshow.manage.MyApplication;
+import liangbin.funshow.manage.NetworkStatus;
 
 /**
  * Created by Administrator on 2015/8/30.
@@ -56,6 +62,9 @@ public class ClassScheduleActivity extends Activity {
     private final int SHOW_VALIDATEPIC=1;
     private final int SHOW_RESULTS=2;
     private final int SHOW_POST_RESULTS=3;
+    private final int GETPIC_TIMEOUT=4;
+    private final int CONNECT_TIMEOUT=5;
+    private final int CONNECT_TIMEOUT_LOGIN=6;
 
     //定义八个Stringblider存贮课表信息
     private StringBuilder classMonday=new StringBuilder();
@@ -70,6 +79,8 @@ public class ClassScheduleActivity extends Activity {
 
     //创建数据库保存课表信息
     private FunShowDatabaseHelper databaseHelper;
+
+    private final String TAG="activity.ClassScheduleActivity";
 
 
     String VIEWSTATE;
@@ -249,9 +260,15 @@ public class ClassScheduleActivity extends Activity {
                     buttonUpdateClass.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            storeClassTimeTatle();
-                            Toast.makeText(MyApplication.getContext(),"更新成功！",
-                                    Toast.LENGTH_SHORT).show();
+                            if (select>100){
+                                storeClassTimeTatle();
+                                Toast.makeText(MyApplication.getContext(),"更新成功！",
+                                        Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(MyApplication.getContext(),"获取数据出错，无法更新！",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     });
 
@@ -260,9 +277,15 @@ public class ClassScheduleActivity extends Activity {
                         buttonUpdateClassTest.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                storeExamTimeTatle();
-                                Toast.makeText(MyApplication.getContext(),"更新成功！",
-                                        Toast.LENGTH_SHORT).show();
+                                if (selectExam>30){
+                                    storeExamTimeTatle();
+                                    Toast.makeText(MyApplication.getContext(),"更新成功！",
+                                            Toast.LENGTH_SHORT).show();
+                                }else {
+                                    Toast.makeText(MyApplication.getContext(),"获取数据出错，无法更新！",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+
 
 
                             }
@@ -287,7 +310,7 @@ public class ClassScheduleActivity extends Activity {
 
 
                     stringBuilder.delete(0,stringBuilder.length());
-                    select=1;
+                    Log.i(TAG,"get log in system content view finish");
                     break;
                 case SHOW_POST_RESULTS:
                     progressDialog2.dismiss();
@@ -308,6 +331,29 @@ public class ClassScheduleActivity extends Activity {
                     }
 
                     break;
+                case GETPIC_TIMEOUT:
+                    AlertDialog.Builder builder1=new AlertDialog.Builder
+                            (ClassScheduleActivity.this)
+                            .setTitle("连接超时")
+                            .setMessage("获取验证码图片出错了，请检查你的网络设置！");
+                    setPositiveButton(builder1).create().show();
+                    break;
+                case CONNECT_TIMEOUT:
+                    progressDialog2.dismiss();
+                    AlertDialog.Builder builder=new AlertDialog.Builder
+                            (ClassScheduleActivity.this)
+                            .setTitle("连接超时")
+                            .setMessage("跟服务器连接超时，请检查你的网络设置！");
+                    setPositiveButton(builder).create().show();
+                    break;
+                case CONNECT_TIMEOUT_LOGIN:
+                    progressDialog1.dismiss();
+                    AlertDialog.Builder builder2=new AlertDialog.Builder
+                            (ClassScheduleActivity.this)
+                            .setTitle("连接超时")
+                            .setMessage("跟服务器连接超时，请检查你的网络设置！");
+                    setPositiveButton(builder2).create().show();
+                    break;
 
                 default:
                     break;
@@ -321,6 +367,7 @@ public class ClassScheduleActivity extends Activity {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.class_schedule_log_in);
+        Log.i(TAG,"activity created");
         getQueryValidateCode();
         logInButton=(Button)findViewById(R.id.class_schedule_log_in_button);
         validateImage=(ImageView)findViewById(R.id.class_schedule_validate_image);
@@ -357,28 +404,32 @@ public class ClassScheduleActivity extends Activity {
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userName = accountNum.getText().toString();
-                userPassword = password.getText().toString();
-                if (userName.isEmpty()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ClassScheduleActivity.this)
-                            .setTitle("输入错误")
-                            .setMessage("学号不能留空！");
-                    setPositiveButton(builder).create().show();
-                } else if (userPassword.isEmpty()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ClassScheduleActivity.this)
-                            .setTitle("输入错误")
-                            .setMessage("密码不能留空！");
-                    setPositiveButton(builder).create().show();
-                } else if (validateCode.getText().toString().isEmpty()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ClassScheduleActivity.this)
-                            .setTitle("请输入验证码")
-                            .setMessage("验证码不能留空！可以点击验证码图片刷新");
-                    setPositiveButton(builder).create().show();
-                } else {
 
-                    createProgressDialog1();
-                    logInSystem();
-                }
+                    userName = accountNum.getText().toString();
+                    userPassword = password.getText().toString();
+                    if (userName.isEmpty()) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ClassScheduleActivity.this)
+                                .setTitle("输入错误")
+                                .setMessage("学号不能留空！");
+                        setPositiveButton(builder).create().show();
+                    } else if (userPassword.isEmpty()) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ClassScheduleActivity.this)
+                                .setTitle("输入错误")
+                                .setMessage("密码不能留空！");
+                        setPositiveButton(builder).create().show();
+                    } else if (validateCode.getText().toString().isEmpty()) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ClassScheduleActivity.this)
+                                .setTitle("请输入验证码")
+                                .setMessage("验证码不能留空！可以点击验证码图片刷新");
+                        setPositiveButton(builder).create().show();
+                    } else {
+                        if (new NetworkStatus().canConntect()){
+                            createProgressDialog1();
+                            logInSystem();
+                        }
+                    }
+
+
 
 
                 //testpost();
@@ -431,6 +482,10 @@ public class ClassScheduleActivity extends Activity {
                     httpClient=new DefaultHttpClient();
 
                     HttpGet httpGet=new HttpGet("http://202.116.0.176/ValidateCode.aspx");
+                    HttpParams httpParams =new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+                    HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                    httpGet.setParams(httpParams);
                     HttpResponse httpResponse = httpClient.execute(httpGet);
                     byte[] bytes= EntityUtils.toByteArray(httpResponse.getEntity());
                     validateBitmap= BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -469,6 +524,9 @@ public class ClassScheduleActivity extends Activity {
 
                 }catch (Exception e){
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what=GETPIC_TIMEOUT;
+                    handler.sendMessage(message);
                 }
 
             }
@@ -477,23 +535,34 @@ public class ClassScheduleActivity extends Activity {
 
     }
     public void refreshValidateCode() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HttpGet httpGet = new HttpGet("http://202.116.0.176/ValidateCode.aspx");
-                    HttpResponse httpResponse = httpClient.execute(httpGet);
-                    byte[] bytes = EntityUtils.toByteArray(httpResponse.getEntity());
-                    validateBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    Message message = new Message();
-                    message.what = SHOW_VALIDATEPIC;
-                    handler.sendMessage(message);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        NetworkStatus networkStatus = new NetworkStatus();
+        if (networkStatus.canConntect()){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        HttpGet httpGet = new HttpGet("http://202.116.0.176/ValidateCode.aspx");
+                        HttpParams httpParams =new BasicHttpParams();
+                        HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+                        HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                        httpGet.setParams(httpParams);
+                        HttpResponse httpResponse = httpClient.execute(httpGet);
+                        byte[] bytes = EntityUtils.toByteArray(httpResponse.getEntity());
+                        validateBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        Message message = new Message();
+                        message.what = SHOW_VALIDATEPIC;
+                        handler.sendMessage(message);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Message message=new Message();
+                        message.what = GETPIC_TIMEOUT;
+                        handler.sendMessage(message);
+                    }
 
-            }
-        }).start();
+                }
+            }).start();
+        }
+
     }
     private void logInSystem(){
 
@@ -522,6 +591,10 @@ public class ClassScheduleActivity extends Activity {
                         "NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
 
                 try {
+                    HttpParams httpParams =new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+                    HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                    httpPost.setParams(httpParams);
                     Thread.sleep(500);
                     httpPost.setEntity(new UrlEncodedFormEntity(params,"UTF-8"));
                     httpResponse=httpClient.execute(httpPost);
@@ -544,6 +617,9 @@ public class ClassScheduleActivity extends Activity {
 
                 }catch (Exception e){
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what = CONNECT_TIMEOUT_LOGIN;
+                    handler.sendMessage(message);
                 }
 
             }
@@ -558,6 +634,10 @@ public class ClassScheduleActivity extends Activity {
                         "PaiKeXuanKe/wfrm_xk_StudentKcb.aspx");
 
                 try{
+                    HttpParams httpParams =new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+                    HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                    httpGet.setParams(httpParams);
                     HttpResponse httpResponseGet=httpClient.execute(httpGet);
                     HttpEntity httpEntityGet=httpResponseGet.getEntity();
                     String resultsGet=EntityUtils.toString(httpEntityGet);
@@ -594,20 +674,27 @@ public class ClassScheduleActivity extends Activity {
                     params.add(new BasicNameValuePair("btnExpKcb",btnExpKcb));
                     params.add(new BasicNameValuePair("dlstNdxq",dlstNdxq));
                     params.add(new BasicNameValuePair("dlstNdxq0",dlstNdxq0));
-                    params.add(new BasicNameValuePair("dlstXndZ",dlstXndZ));
-                    params.add(new BasicNameValuePair("dlstXndZ0",dlstXndZ));
+                    params.add(new BasicNameValuePair("dlstXndZ", dlstXndZ));
+                    params.add(new BasicNameValuePair("dlstXndZ0", dlstXndZ));
 
                     httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
-                    httpPost.addHeader("User-Agent","Mozilla/5.0 (Windows " +
+                    httpPost.addHeader("User-Agent", "Mozilla/5.0 (Windows " +
                             "NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
                     httpPost.setHeader("Referer", "http://202.116.0.176/" +
                             "Secure/PaiKeXuanKe/wfrm_xk_StudentKcb.aspx");
-                    httpPost.setEntity(new UrlEncodedFormEntity(params,"gbk"));
+                    httpPost.setEntity(new UrlEncodedFormEntity(params, "gbk"));
+                    HttpParams httpParamsPOST =new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParamsPOST, 3000);
+                    HttpConnectionParams.setSoTimeout(httpParamsPOST, 3000);
+                    httpPost.setParams(httpParamsPOST);
                     HttpResponse httpResponse1= httpClient.execute(httpPost);
                     returnCode=httpResponse1.getStatusLine().getStatusCode();
+                    Log.i(TAG,"get returncode");
                     if (returnCode==500){
                         isGetResults="false";
+                        Log.i(TAG,"Service wrong with  500");
                     }else {
+                        Log.i(TAG,"get class schedule start");
                         HttpEntity httpEntityPost=httpResponse1.getEntity();
                         resultsPost=EntityUtils.toString(httpEntityPost);
                         Document document11=Jsoup.parse(resultsPost);
@@ -651,7 +738,9 @@ public class ClassScheduleActivity extends Activity {
                         classFriday.delete(0, classFriday.length());
                         classSaturday.delete(0, classSaturday.length());
                         classSunday.delete(0,classSunday.length());
+                        select=1;
                         for(Element ele:ele2){
+                            Log.i(TAG,"parse html"+select);
                             String className=ele.text();
                             if (30<=select&&select<45){
                                 classTimes[select%15]=className;
@@ -749,8 +838,9 @@ public class ClassScheduleActivity extends Activity {
                             select++;
 
                         }
-
+                        Log.i(TAG,"parse html finish");
                     }
+
                     HttpPost httpPostExam=new HttpPost("http://202.116.0.176/Secure/PaiKeXuanKe/" +
                             "wfrm_xk_StudentKcb.aspx");
                     List<NameValuePair> paramsExam=new ArrayList<NameValuePair>();
@@ -902,6 +992,9 @@ public class ClassScheduleActivity extends Activity {
 
                 }catch (Exception e){
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what=CONNECT_TIMEOUT;
+                    handler.sendMessage(message);
                 }
 
             }

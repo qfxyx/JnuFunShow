@@ -19,6 +19,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -40,6 +43,7 @@ public class NotificationTeachingActivity extends Activity{
 
     private HttpClient httpClient;
     private final int RETURN_HTML=1;
+    private final int CONNECT_TIMEOUT=2;
     private final String teachingLink="http://jwc.jnu.edu.cn/SmallClass_index.asp?" +
             "SmallClassName=%CD%A8%D6%AA&BigClassName=%BD%CC%CE%F1%B4%A6";
     ProgressDialog progressDialog;
@@ -104,6 +108,15 @@ public class NotificationTeachingActivity extends Activity{
                     }
 
                     break;
+                case CONNECT_TIMEOUT:
+                    progressDialog.dismiss();
+                    AlertDialog.Builder builder=new AlertDialog.Builder
+                            (NotificationTeachingActivity.this)
+                            .setTitle("连接超时")
+                            .setMessage("连接服务器出错了，请检查你的网络设置！");
+                    setPositiveButton(builder).create().show();
+
+                    break;
                 default:
                     break;
             }
@@ -127,6 +140,10 @@ public class NotificationTeachingActivity extends Activity{
                 try{
                     httpClient=new DefaultHttpClient();
                     HttpGet httpGet=new HttpGet(teachingLink);
+                    HttpParams httpParams =new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams,3000);
+                    HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                    httpGet.setParams(httpParams);
                     HttpResponse httpResponse=httpClient.execute(httpGet);
                     HttpEntity entity=httpResponse.getEntity();
                     String htmlString= EntityUtils.toString(entity,"gbk");
@@ -176,6 +193,9 @@ public class NotificationTeachingActivity extends Activity{
 
                 }catch (Exception e){
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what = CONNECT_TIMEOUT;
+                    handler.sendMessage(message);
                 }
 
             }

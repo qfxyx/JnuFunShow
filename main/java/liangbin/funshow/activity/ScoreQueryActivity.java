@@ -31,6 +31,9 @@ import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -49,6 +52,7 @@ import java.util.List;
 
 import liangbin.funshow.R;
 import liangbin.funshow.manage.MyApplication;
+import liangbin.funshow.manage.NetworkStatus;
 
 /**
  * Created by Administrator on 2015/8/17.
@@ -57,6 +61,8 @@ public class ScoreQueryActivity extends Activity {
     private final int SHOW_VALIDATEPIC=1;
     private final int SHOW_RESULTS=2;
     private final int SHOW_TEST=3;
+    private final int CONNECT_TIMEOUT=4;
+    private final int GETPIC_TIMEOUT=5;
     HttpClient httpClient;
     HttpClient httpClient1=new DefaultHttpClient();
     HttpPost httpPost;
@@ -140,6 +146,22 @@ public class ScoreQueryActivity extends Activity {
                     textView.setText(stringTest);
 
                 }
+                break;
+                case CONNECT_TIMEOUT:
+                    progressDialog.dismiss();
+                    AlertDialog.Builder builder=new AlertDialog.Builder
+                            (ScoreQueryActivity.this)
+                            .setTitle("连接超时")
+                            .setMessage("连接服务器出错了，请检查你的网络设置！");
+                    setPositiveButton(builder).create().show();
+                    break;
+                case GETPIC_TIMEOUT:
+                    AlertDialog.Builder builder1=new AlertDialog.Builder
+                            (ScoreQueryActivity.this)
+                            .setTitle("连接超时")
+                            .setMessage("获取验证码图片出错了，请检查你的网络设置！");
+                    setPositiveButton(builder1).create().show();
+                    break;
 
                 default:
                     break;
@@ -179,7 +201,9 @@ public class ScoreQueryActivity extends Activity {
         validateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshValidateCode();
+                if (new NetworkStatus().canConntect()){
+                    refreshValidateCode();
+                }
 
             }
         });
@@ -206,8 +230,10 @@ public class ScoreQueryActivity extends Activity {
                             .setMessage("验证码不能留空！可以点击验证码图片刷新");
                     setPositiveButton(builder).create().show();
                 }else {
-                    queryScores();
-                    createProgressDialog();
+                    if (new NetworkStatus().canConntect()){
+                        queryScores();
+                        createProgressDialog();
+                    }
                 }
 
 
@@ -235,6 +261,10 @@ public class ScoreQueryActivity extends Activity {
                     httpClient=new DefaultHttpClient();
 
                     HttpGet httpGet=new HttpGet("http://202.116.0.176/ValidateCode.aspx");
+                    HttpParams httpParams =new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+                    HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                    httpGet.setParams(httpParams);
                     HttpResponse httpResponse = httpClient.execute(httpGet);
                     byte[] bytes= EntityUtils.toByteArray(httpResponse.getEntity());
                     validateBitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
@@ -273,6 +303,9 @@ public class ScoreQueryActivity extends Activity {
 
                 }catch (Exception e){
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what = GETPIC_TIMEOUT;
+                    handler.sendMessage(message);
                 }
 
             }
@@ -286,6 +319,10 @@ public class ScoreQueryActivity extends Activity {
             public void run() {
                 try {
                     HttpGet httpGet=new HttpGet("http://202.116.0.176/ValidateCode.aspx");
+                    HttpParams httpParams =new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+                    HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                    httpGet.setParams(httpParams);
                     HttpResponse httpResponse = httpClient.execute(httpGet);
                     byte[] bytes= EntityUtils.toByteArray(httpResponse.getEntity());
                     validateBitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
@@ -294,6 +331,9 @@ public class ScoreQueryActivity extends Activity {
                     handler.sendMessage(message);
                 }catch (Exception e){
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what = GETPIC_TIMEOUT;
+                    handler.sendMessage(message);
                 }
 
             }
@@ -337,6 +377,10 @@ public class ScoreQueryActivity extends Activity {
                         "NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
 
                 try {
+                    HttpParams httpParams =new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+                    HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                    httpPost.setParams(httpParams);
                     httpPost.setEntity(new UrlEncodedFormEntity(params,"UTF-8"));
                     httpResponse=httpClient.execute(httpPost);
                     httpClient.execute(httpPost);
@@ -353,6 +397,9 @@ public class ScoreQueryActivity extends Activity {
 
                 }catch (Exception e){
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what = CONNECT_TIMEOUT;
+                    handler.sendMessage(message);
                 }
 
             }
@@ -431,61 +478,5 @@ public class ScoreQueryActivity extends Activity {
         progressDialog.setCancelable(true);
         progressDialog.show();
     }
-    public void testpost(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                PrintWriter out=null;
-                BufferedReader in=null;
-                String results="";
 
-                try {
-                    URL url=new URL("http://cet.99sushe.com/find");
-                    URLConnection connection=url.openConnection();
-                    connection.setRequestProperty("User-Agent"," Mozilla/5.0 " +
-                            "(Windows NT 5.1; rv:14.0) Gecko/20100101 Firefox/14.0.1");
-                    connection.setRequestProperty("Accept"," text/html,application/xhtml+xml," +
-                            "application/xml;q=0.9,image/webp,*/*;q=0.8");
-                    connection.setRequestProperty("Accept-Language"," en-us,en;q=0.5");
-                    connection.setRequestProperty("Referer"," http://cet.99sushe.com");
-                    connection.setDoOutput(true);
-                    connection.setDoInput(true);
-                    out=new PrintWriter(connection.getOutputStream());
-                    String xm= URLEncoder.encode("夏孙志", "gb2312");
-                    out.print("id=440020151200317&name="+xm);
-                    out.flush();
-                    in=new BufferedReader(new InputStreamReader
-                            (connection.getInputStream(),"GBK"));
-                    String line;
-                    while ((line=in.readLine())!=null){
-                        results+="\n"+line;
-                    }
-                   String[] responses=results.split(",");
-                    String[] titles={"aa:","bb:","cc:"};
-                    stringBuilder.append(titles[0]+responses[0]+"\n"+titles[1]+responses[1]);
-                    String result=stringBuilder.toString();
-                    Message message=new Message();
-                    message.what=SHOW_TEST;
-                    message.obj=result;
-                    handler.sendMessage(message);
-
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-                finally {
-                    try{
-                        if(out!=null) {
-                            out.close();
-                        }
-                        if (in!=null){
-                            in.close();
-                        }
-                    }catch (IOException e){
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
-    }
 }

@@ -29,6 +29,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -39,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.NetworkStatus;
 
 public class LibraryQueryActivity extends Activity {
 
@@ -63,6 +67,7 @@ public class LibraryQueryActivity extends Activity {
 
     private final int SHOW_RESULTS1=1;
     private final int SHOW_RESULTS2=2;
+    private final int CONNECT_TIMEOUT=3;
 
     //定义四个字符串数组存贮续借返回的数据
     String[] titles=new String[20];
@@ -130,6 +135,12 @@ public class LibraryQueryActivity extends Activity {
                   }
                   initSelect();
                   break;
+              case CONNECT_TIMEOUT:
+                  progressDialog.dismiss();
+                  AlertDialog.Builder builder=new AlertDialog.Builder(LibraryQueryActivity.this)
+                          .setTitle("连接超时")
+                          .setMessage("请检查你的网络设置或更换网络环境稍后再试！");
+                  setPositiveButton(builder).create().show();
               default:
                   break;
           }
@@ -168,6 +179,7 @@ public class LibraryQueryActivity extends Activity {
         buttonQuery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                NetworkStatus networkStatus=new NetworkStatus();
                 getName=editTextName.getText().toString();
                 getNum="0000"+editTextNum.getText().toString();
                 if(editTextNum.getText().toString().isEmpty()){
@@ -183,9 +195,12 @@ public class LibraryQueryActivity extends Activity {
                     setPositiveButton(builder).create().show();
 
                 }else {
-                    rememberMe();
-                    createProgressDialog();
-                    queryLib();
+                    if (networkStatus.canConntect()){
+                        rememberMe();
+                        createProgressDialog();
+                        queryLib();
+                    }
+
                 }
 
             }
@@ -193,6 +208,7 @@ public class LibraryQueryActivity extends Activity {
         buttonHistroy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                NetworkStatus networkStatus=new NetworkStatus();
                 getName=editTextName.getText().toString();
                 getNum="0000"+editTextNum.getText().toString();
                 if(editTextNum.getText().toString().isEmpty()){
@@ -208,9 +224,12 @@ public class LibraryQueryActivity extends Activity {
                     setPositiveButton(builder).create().show();
 
                 }else {
-                    rememberMe();
-                    createProgressDialog();
-                    LibQueryReadHistory();
+                    if(networkStatus.canConntect()){
+                        rememberMe();
+                        createProgressDialog();
+                        LibQueryReadHistory();
+                    }
+
 
                 }
 
@@ -219,13 +238,17 @@ public class LibraryQueryActivity extends Activity {
         buttonFindBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(LibraryQueryActivity.this,WebViewActivity.class);
-                intent.putExtra("links","http://202.116.13.3:8080/sms/opac/" +
-                                 "search/showSearch.action?xc=6");
-                intent.putExtra("what"," ");
-                intent.putExtra("whatMsg","");
-                intent.putExtra("title","馆藏查询");
-                startActivity(intent);
+                NetworkStatus networkStatus=new NetworkStatus();
+                if (networkStatus.canConntect()){
+                    Intent intent=new Intent(LibraryQueryActivity.this,WebViewActivity.class);
+                    intent.putExtra("links","http://202.116.13.3:8080/sms/opac/" +
+                            "search/showSearch.action?xc=6");
+                    intent.putExtra("what"," ");
+                    intent.putExtra("whatMsg","");
+                    intent.putExtra("title","馆藏查询");
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -237,16 +260,25 @@ public class LibraryQueryActivity extends Activity {
             public void run() {
                 HttpClient httpClient=new DefaultHttpClient();
                 HttpResponse httpResponse;
+                try {
                 HttpPost httpPost=new HttpPost("http://202.116.13.244/patroninfo*chx");
+                HttpParams httpParams=new BasicHttpParams();
+                HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+                HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                httpPost.setParams(httpParams);
                 List<NameValuePair> params=new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("code",getNum));
 
-                params.add(new BasicNameValuePair("name",getName));
-                try {
-                    httpPost.setEntity(new UrlEncodedFormEntity(params,"UTF-8"));
+                params.add(new BasicNameValuePair("name", getName));
+
+                    httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
                     httpClient.execute(httpPost);
                     HttpGet httpGet=new HttpGet("http://202.116.13.244/patronin" +
                             "fo~S1*chx/1094279/readinghistory");
+                    HttpParams httpParamsGet=new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParamsGet, 3000);
+                    HttpConnectionParams.setSoTimeout(httpParamsGet, 3000);
+                    httpGet.setParams(httpParamsGet);
                     httpResponse=httpClient.execute(httpGet);
                     HttpEntity httpEntity=httpResponse.getEntity();
                     String results= EntityUtils.toString(httpEntity);
@@ -257,6 +289,9 @@ public class LibraryQueryActivity extends Activity {
 
                 }catch (Exception e){
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what=CONNECT_TIMEOUT;
+                    handler.sendMessage(message);
                 }
 
 
@@ -275,10 +310,18 @@ public class LibraryQueryActivity extends Activity {
                 params.add(new BasicNameValuePair("code",getNum));
                 params.add(new BasicNameValuePair("name",getName));
                 try {
+                    HttpParams httpParams=new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+                    HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                    httpPost.setParams(httpParams);
                     httpPost.setEntity(new UrlEncodedFormEntity(params,"UTF-8"));
                     httpClient.execute(httpPost);
                     HttpGet httpGet=new HttpGet("http://202.116.13.244/patron" +
                             "info~S1*chx/1094113/items");
+                    HttpParams httpParamsGet=new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParamsGet, 3000);
+                    HttpConnectionParams.setSoTimeout(httpParamsGet, 3000);
+                    httpGet.setParams(httpParamsGet);
                    httpResponse=httpClient.execute(httpGet);
                     HttpEntity httpEntity=httpResponse.getEntity();
                     String results= EntityUtils.toString(httpEntity);
@@ -290,6 +333,9 @@ public class LibraryQueryActivity extends Activity {
 
                 }catch (Exception e){
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what=CONNECT_TIMEOUT;
+                    handler.sendMessage(message);
                 }
             }
         }).start();

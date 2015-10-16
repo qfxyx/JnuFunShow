@@ -28,6 +28,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.NetworkStatus;
 
 /**
  * Created by Administrator on 2015/8/27.
@@ -46,6 +50,8 @@ public class GradesActivity extends Activity {
     private HttpClient httpClient;
     private final int SHOW_VALIDATEPIC=1;
     private final int SHOW_RESULTS=2;
+    private final int GETPIC_TIMEOUT=3;
+    private final int CONNECT_TIMEOUT=4;
 
     String VIEWSTATE;
     String VIEWSTATEGENERATOR;
@@ -97,7 +103,18 @@ public class GradesActivity extends Activity {
                     stringBuilder.delete(0,stringBuilder.length());
                     select=1;
                     break;
-
+                case GETPIC_TIMEOUT:
+                    AlertDialog.Builder builder=new AlertDialog.Builder(GradesActivity.this)
+                            .setTitle("连接超时")
+                            .setMessage("获取图片验证码失败，请检查网络设置！");
+                    setPositiveButton(builder).create().show();
+                    break;
+                case CONNECT_TIMEOUT:
+                    progressDialog1.dismiss();
+                    AlertDialog.Builder builder1=new AlertDialog.Builder(GradesActivity.this)
+                            .setTitle("连接超时")
+                            .setMessage("连接服务器失败，请检查网络设置或稍后再试！");
+                    setPositiveButton(builder1).create().show();
 
                 default:
                     break;
@@ -135,7 +152,11 @@ public class GradesActivity extends Activity {
         validateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshValidateCode();
+                NetworkStatus networkStatus=new NetworkStatus();
+                if(networkStatus.canConntect()){
+                    refreshValidateCode();
+                }
+
 
             }
         });
@@ -143,6 +164,7 @@ public class GradesActivity extends Activity {
         queryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                NetworkStatus networkStatus=new NetworkStatus();
                 userName=accountNum.getText().toString();
                 userPassword=password.getText().toString();
                 if (userName.isEmpty()){
@@ -161,8 +183,11 @@ public class GradesActivity extends Activity {
                             .setMessage("验证码不能留空！可以点击验证码图片刷新");
                     setPositiveButton(builder).create().show();
                 }else {
-                    queryGrades();
-                    createProgressDialog1();
+                    if (networkStatus.canConntect()){
+                        queryGrades();
+                        createProgressDialog1();
+                    }
+
                 }
 
 
@@ -189,6 +214,10 @@ public class GradesActivity extends Activity {
                     httpClient=new DefaultHttpClient();
 
                     HttpGet httpGet=new HttpGet("http://202.116.0.176/ValidateCode.aspx");
+                    HttpParams httpParams=new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams,3000);
+                    HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                    httpGet.setParams(httpParams);
                     HttpResponse httpResponse = httpClient.execute(httpGet);
                     byte[] bytes= EntityUtils.toByteArray(httpResponse.getEntity());
                     validateBitmap= BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -227,6 +256,9 @@ public class GradesActivity extends Activity {
 
                 }catch (Exception e){
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what=GETPIC_TIMEOUT;
+                    handler.sendMessage(message);
                 }
 
             }
@@ -240,6 +272,10 @@ public class GradesActivity extends Activity {
             public void run() {
                 try {
                     HttpGet httpGet = new HttpGet("http://202.116.0.176/ValidateCode.aspx");
+                    HttpParams httpParams=new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams,3000);
+                    HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                    httpGet.setParams(httpParams);
                     HttpResponse httpResponse = httpClient.execute(httpGet);
                     byte[] bytes = EntityUtils.toByteArray(httpResponse.getEntity());
                     validateBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -248,6 +284,9 @@ public class GradesActivity extends Activity {
                     handler.sendMessage(message);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what=GETPIC_TIMEOUT;
+                    handler.sendMessage(message);
                 }
 
             }
@@ -269,7 +308,7 @@ public class GradesActivity extends Activity {
                 }
                 editor.commit();
 
-                String getValidateCode=validateCode.getText().toString();
+                String getValidateCode=validateCode.getText().toString().trim();
                 HttpPost httpPost=new HttpPost("http://202.116.0.176/Login.aspx");
                 HttpResponse httpResponse;
                 List<NameValuePair> params=new ArrayList<NameValuePair>();
@@ -290,7 +329,11 @@ public class GradesActivity extends Activity {
                         "NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
 
                 try {
-                    httpPost.setEntity(new UrlEncodedFormEntity(params,"UTF-8"));
+                    HttpParams httpParams=new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams,3000);
+                    HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                    httpPost.setParams(httpParams);
+                    httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
                     //httpResponse=httpClient.execute(httpPost);
                     httpClient.execute(httpPost);
                     HttpGet httpGet=new HttpGet("http://202.116.0.176/Secure/" +
@@ -375,6 +418,9 @@ public class GradesActivity extends Activity {
 
                 }catch (Exception e){
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what=CONNECT_TIMEOUT;
+                    handler.sendMessage(message);
                 }
 
             }

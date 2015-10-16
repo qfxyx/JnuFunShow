@@ -29,6 +29,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
@@ -40,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.NetworkStatus;
 
 /**
  * Created by Administrator on 2015/8/4.
@@ -73,7 +77,7 @@ public class CetQueryActivity extends Activity{
             "未在第一时间向系统录入结果，" +
             "若查询不到四六级最新成绩，请选择“准考证+名字”入口试试。";
     private final int SHOW_RESULT=0;
-   // private final int SHOW_RESULT1=1;
+    private final int CONNECT_TIMEOUT=1;
     private Handler handler= new Handler(){
         public void handleMessage(Message msg){
             switch (msg.what){
@@ -98,9 +102,20 @@ public class CetQueryActivity extends Activity{
                         intent.putExtra("title","四六级成绩--"+sendName);
                         intent.putExtra("result",sendResult);
                         startActivity(intent);
-
-
                     }
+                    break;
+
+                case CONNECT_TIMEOUT:
+                    progressDialog.dismiss();
+                    String waring="连接超时，请检查你的网络状况";
+                    AlertDialog.Builder builder=new AlertDialog.Builder(CetQueryActivity.this)
+                            .setTitle("连接超时")
+                            .setMessage(waring);
+                    setPositiveButton(builder).create().show();
+                    break;
+
+                default:
+                    break;
 
 
             }
@@ -131,35 +146,37 @@ public class CetQueryActivity extends Activity{
         queryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isInitOk.equals("yes")){
-                    if(ticketNumber.getText().toString().length()<8){
-                        String waring="请正确输入身份证号";
-                        AlertDialog.Builder builder=new AlertDialog.Builder(CetQueryActivity.this)
-                                .setTitle("输入错误")
-                                .setMessage(waring);
-                        setPositiveButton(builder).create().show();
-                    }else if(name.getText().toString().isEmpty()){
-                        String waring="请输入姓名";
-                        AlertDialog.Builder builder=new AlertDialog.Builder(CetQueryActivity.this)
-                                .setTitle("输入错误")
-                                .setMessage(waring);
-                        setPositiveButton(builder).create().show();
+                NetworkStatus networkStatus=new NetworkStatus();
+                if (networkStatus.canConntect()){
+                    if (isInitOk.equals("yes")){
+                        if(ticketNumber.getText().toString().length()<8){
+                            String waring="请正确输入身份证号";
+                            AlertDialog.Builder builder=new AlertDialog.Builder(CetQueryActivity.this)
+                                    .setTitle("输入错误")
+                                    .setMessage(waring);
+                            setPositiveButton(builder).create().show();
+                        }else if(name.getText().toString().isEmpty()){
+                            String waring="请输入姓名";
+                            AlertDialog.Builder builder=new AlertDialog.Builder(CetQueryActivity.this)
+                                    .setTitle("输入错误")
+                                    .setMessage(waring);
+                            setPositiveButton(builder).create().show();
+                        }else {
+                            createProgressDialog();
+                            sendQuery();
+
+                        }
+
                     }else {
-                        createProgressDialog();
-                        sendQuery();
+                        String waring="亲，你按得太快啦，程序正在初始化，请耐心等待2秒钟...";
+                        AlertDialog.Builder builder=new AlertDialog.Builder(CetQueryActivity.this)
+                                .setTitle("请稍等2秒哦")
+                                .setMessage(waring);
+                        setPositiveButton(builder).create().show();
+                        getparams();
 
                     }
-
-                }else {
-                    String waring="亲，你按得太快啦，程序正在初始化，请耐心等待2秒钟...";
-                    AlertDialog.Builder builder=new AlertDialog.Builder(CetQueryActivity.this)
-                            .setTitle("请稍等2秒哦")
-                            .setMessage(waring);
-                    setPositiveButton(builder).create().show();
                 }
-
-
-
 
             }
         });
@@ -173,6 +190,10 @@ public class CetQueryActivity extends Activity{
             public void run() {
                 HttpGet httpGet0=new HttpGet("http://cet.jnu.edu.cn/cet/cj_research.aspx");
                 try {
+                    HttpParams httpParams= new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams,3000);
+                    HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                    httpGet0.setParams(httpParams);
                     HttpResponse httpResponse0= httpClient.execute(httpGet0);
                     HttpEntity httpEntity0=httpResponse0.getEntity();
                     String string0=EntityUtils.toString(httpEntity0);
@@ -191,9 +212,10 @@ public class CetQueryActivity extends Activity{
                     for(org.jsoup.nodes.Element element:elements4){
                         EVENTVALIDATION=element.attr("value");
                     }
-
+                    isInitOk="yes";
                 }catch (Exception e){
                     e.printStackTrace();
+                    isInitOk="";
                 }
 
             isInitOk="yes";
@@ -218,7 +240,11 @@ public class CetQueryActivity extends Activity{
                 }
                 editor.commit();
                 try{
+                    HttpParams httpParams=new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams,3000);
+                    HttpConnectionParams.setSoTimeout(httpParams,3000);
                     HttpPost httpPost=new HttpPost("http://cet.jnu.edu.cn/cet/cj_research.aspx");
+                    httpPost.setParams(httpParams);
                     List<NameValuePair> params =new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair("TextBox2",Idcard));
                     params.add(new BasicNameValuePair("TextBox1",names));
@@ -252,13 +278,16 @@ public class CetQueryActivity extends Activity{
 
                 }catch (Exception e){
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what=CONNECT_TIMEOUT;
+                    handler.sendMessage(message);
                 }
 
             }
         }).start();
     }
     private void parseHtml(){
-        stringBuilder.delete(0,stringBuilder.length());
+        stringBuilder.delete(0, stringBuilder.length());
         Document document= Jsoup.parse(response);
         Elements table=document.select("#GridView1");
         Document row =Jsoup.parse(table.toString());
@@ -294,4 +323,5 @@ public class CetQueryActivity extends Activity{
             }
         });
     }
+
 }

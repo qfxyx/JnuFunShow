@@ -19,6 +19,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -39,6 +42,7 @@ public class NotificationCampusActivity extends Activity {
 
     private HttpClient httpClient;
     private final int RETURN_HTML=1;
+    private final int CONNECT_TIMEOUT=2;
     private final String comprehensiveLink="http://www.jnu.edu.cn/jnu2014/" +
             "article_list.asp?channelID=5037";
     ProgressDialog progressDialog;
@@ -107,6 +111,14 @@ public class NotificationCampusActivity extends Activity {
                     }
 
                     break;
+                case CONNECT_TIMEOUT:
+                    progressDialog.dismiss();
+                    AlertDialog.Builder builder=new AlertDialog.Builder
+                            (NotificationCampusActivity.this)
+                            .setTitle("连接超时")
+                            .setMessage("连接服务器出错了，请检查你的网络设置！");
+                    setPositiveButton(builder).create().show();
+                    break;
                 default:
                     break;
             }
@@ -131,6 +143,10 @@ public class NotificationCampusActivity extends Activity {
                     httpClient=new DefaultHttpClient();
                     HttpGet httpGet=new HttpGet("http://www.jnu.edu.cn" +
                             "/pub/channel/channel_5037_20_1.xml");
+                    HttpParams httpParams =new BasicHttpParams();
+                    HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+                    HttpConnectionParams.setSoTimeout(httpParams, 3000);
+                    httpGet.setParams(httpParams);
                     HttpResponse httpResponse=httpClient.execute(httpGet);
                     HttpEntity entity=httpResponse.getEntity();
                     String htmlString= EntityUtils.toString(entity, "utf-8");
@@ -190,6 +206,9 @@ public class NotificationCampusActivity extends Activity {
 
                 }catch (Exception e){
                     e.printStackTrace();
+                    Message message=new Message();
+                    message.what = CONNECT_TIMEOUT;
+                    handler.sendMessage(message);
                 }
 
             }
