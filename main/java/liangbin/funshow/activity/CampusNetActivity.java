@@ -134,7 +134,7 @@ public class CampusNetActivity extends Activity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NetworkStatus networkStatus =new NetworkStatus();
+                NetworkStatus networkStatus =new NetworkStatus(CampusNetActivity.this);
                 if (networkStatus.canConntect()){
                     number=numberEditText.getText().toString();
                     name=nameEditText.getText().toString();

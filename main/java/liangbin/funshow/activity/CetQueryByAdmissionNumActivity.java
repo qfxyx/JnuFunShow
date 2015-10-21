@@ -113,7 +113,7 @@ public class CetQueryByAdmissionNumActivity extends Activity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NetworkStatus networkStatus=new NetworkStatus();
+                NetworkStatus networkStatus=new NetworkStatus(CetQueryByAdmissionNumActivity.this);
                 if(networkStatus.canConntect()){
                     if (numEditText.getText().toString().length()!=15){
                         AlertDialog.Builder builder=new AlertDialog.Builder

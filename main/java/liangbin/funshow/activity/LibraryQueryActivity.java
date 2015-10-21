@@ -179,7 +179,7 @@ public class LibraryQueryActivity extends Activity {
         buttonQuery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NetworkStatus networkStatus=new NetworkStatus();
+                NetworkStatus networkStatus=new NetworkStatus(LibraryQueryActivity.this);
                 getName=editTextName.getText().toString();
                 getNum="0000"+editTextNum.getText().toString();
                 if(editTextNum.getText().toString().isEmpty()){
@@ -208,7 +208,7 @@ public class LibraryQueryActivity extends Activity {
         buttonHistroy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NetworkStatus networkStatus=new NetworkStatus();
+                NetworkStatus networkStatus=new NetworkStatus(LibraryQueryActivity.this);
                 getName=editTextName.getText().toString();
                 getNum="0000"+editTextNum.getText().toString();
                 if(editTextNum.getText().toString().isEmpty()){
@@ -238,7 +238,7 @@ public class LibraryQueryActivity extends Activity {
         buttonFindBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NetworkStatus networkStatus=new NetworkStatus();
+                NetworkStatus networkStatus=new NetworkStatus(LibraryQueryActivity.this);
                 if (networkStatus.canConntect()){
                     Intent intent=new Intent(LibraryQueryActivity.this,WebViewActivity.class);
                     intent.putExtra("links","http://202.116.13.3:8080/sms/opac/" +

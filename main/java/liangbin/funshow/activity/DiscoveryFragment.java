@@ -79,7 +79,7 @@ public class DiscoveryFragment extends Fragment {
         listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                NetworkStatus networkStatus=new NetworkStatus();
+                NetworkStatus networkStatus=new NetworkStatus(getActivity());
                 switch (position){
                     case 0:
                         if (networkStatus.canConntect()){
@@ -117,7 +117,7 @@ public class DiscoveryFragment extends Fragment {
         listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                NetworkStatus networkStatus = new NetworkStatus();
+                NetworkStatus networkStatus = new NetworkStatus(getActivity());
                 switch (position) {
                     case 0:
                         if (networkStatus.canConntect()) {
@@ -154,7 +154,7 @@ public class DiscoveryFragment extends Fragment {
         listView3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                NetworkStatus networkStatus = new NetworkStatus();
+                NetworkStatus networkStatus = new NetworkStatus(getActivity());
                 if (networkStatus.canConntect()) {
                     switch (position) {
                         case 0:

@@ -63,7 +63,7 @@ public class FunshowFragment extends android.support.v4.app.Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TitleListView titleListView=titleList.get(position);
-                NetworkStatus networkStatus=new NetworkStatus();
+                NetworkStatus networkStatus=new NetworkStatus(getActivity());
                 switch (position){
                     case 0:
                         if (networkStatus.canConntect()){

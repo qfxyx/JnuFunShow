@@ -152,7 +152,7 @@ public class GradesActivity extends Activity {
         validateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NetworkStatus networkStatus=new NetworkStatus();
+                NetworkStatus networkStatus=new NetworkStatus(GradesActivity.this);
                 if(networkStatus.canConntect()){
                     refreshValidateCode();
                 }
@@ -164,7 +164,7 @@ public class GradesActivity extends Activity {
         queryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NetworkStatus networkStatus=new NetworkStatus();
+                NetworkStatus networkStatus=new NetworkStatus(GradesActivity.this);
                 userName=accountNum.getText().toString();
                 userPassword=password.getText().toString();
                 if (userName.isEmpty()){

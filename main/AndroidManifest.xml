@@ -48,12 +48,15 @@
             android:name=".activity.CetEntranceChoose">
         </activity>
 
+        <!--sttaHidden 进入edittext时不自动弹出键盘，以免影响客户体验,下同-->
         <activity
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/Base.Theme.AppCompat.Light"
             android:name=".activity.CetQueryByAdmissionNumActivity">
         </activity>
 
         <activity
+            android:windowSoftInputMode="stateHidden"
             android:name=".activity.CetQueryActivity"
             android:theme="@style/Base.Theme.AppCompat.Light" >
         </activity>
@@ -64,11 +67,13 @@
         </activity>
 
         <activity
+            android:windowSoftInputMode="stateHidden"
             android:name=".activity.ScoreQueryActivity"
             android:theme="@style/Base.Theme.AppCompat.Light" >
         </activity>
 
         <activity
+            android:windowSoftInputMode="stateHidden"
             android:name=".activity.CampusNetActivity"
             android:theme="@style/Base.Theme.AppCompat.Light" >
         </activity>
@@ -77,17 +82,20 @@
         </activity>
 
         <activity
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/Base.Theme.AppCompat.Light"
             android:name=".activity.LibraryQueryActivity"
              >
         </activity>
 
         <activity
+            android:windowSoftInputMode="stateHidden"
             android:name=".activity.GradesActivity"
             android:theme="@style/Base.Theme.AppCompat.Light">
         </activity>
 
         <activity
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/Base.Theme.AppCompat.Light"
             android:name=".activity.ClassScheduleActivity">
         </activity>

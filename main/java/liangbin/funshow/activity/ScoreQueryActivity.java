@@ -201,7 +201,7 @@ public class ScoreQueryActivity extends Activity {
         validateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new NetworkStatus().canConntect()){
+                if (new NetworkStatus(ScoreQueryActivity.this).canConntect()){
                     refreshValidateCode();
                 }
 
@@ -230,7 +230,7 @@ public class ScoreQueryActivity extends Activity {
                             .setMessage("验证码不能留空！可以点击验证码图片刷新");
                     setPositiveButton(builder).create().show();
                 }else {
-                    if (new NetworkStatus().canConntect()){
+                    if (new NetworkStatus(ScoreQueryActivity.this).canConntect()){
                         queryScores();
                         createProgressDialog();
                     }

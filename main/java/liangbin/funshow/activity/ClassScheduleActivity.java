@@ -423,7 +423,7 @@ public class ClassScheduleActivity extends Activity {
                                 .setMessage("验证码不能留空！可以点击验证码图片刷新");
                         setPositiveButton(builder).create().show();
                     } else {
-                        if (new NetworkStatus().canConntect()){
+                        if (new NetworkStatus(ClassScheduleActivity.this).canConntect()){
                             createProgressDialog1();
                             logInSystem();
                         }
@@ -535,7 +535,7 @@ public class ClassScheduleActivity extends Activity {
 
     }
     public void refreshValidateCode() {
-        NetworkStatus networkStatus = new NetworkStatus();
+        NetworkStatus networkStatus = new NetworkStatus(ClassScheduleActivity.this);
         if (networkStatus.canConntect()){
             new Thread(new Runnable() {
                 @Override

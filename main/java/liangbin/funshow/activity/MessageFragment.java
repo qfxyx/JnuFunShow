@@ -77,7 +77,7 @@ public class MessageFragment extends android.support.v4.app.Fragment {
                         startActivity(intent0);
                         break;
                     case 1:
-                        NetworkStatus networkStatus=new NetworkStatus();
+                        NetworkStatus networkStatus=new NetworkStatus(getActivity());
                         if (networkStatus.canConntect()){
                             Intent intent1=new Intent(getActivity(),WebViewActivity.class);
                             intent1.putExtra("links",jnuNews);

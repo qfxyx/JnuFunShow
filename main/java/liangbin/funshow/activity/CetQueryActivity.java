@@ -146,7 +146,7 @@ public class CetQueryActivity extends Activity{
         queryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NetworkStatus networkStatus=new NetworkStatus();
+                NetworkStatus networkStatus=new NetworkStatus(CetQueryActivity.this);
                 if (networkStatus.canConntect()){
                     if (isInitOk.equals("yes")){
                         if(ticketNumber.getText().toString().length()<8){

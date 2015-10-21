@@ -42,7 +42,7 @@ public class NotificationActivity extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                NetworkStatus networkStatus=new NetworkStatus();
+                NetworkStatus networkStatus=new NetworkStatus(NotificationActivity.this);
                 if (networkStatus.canConntect()){
                     switch (position){
 
