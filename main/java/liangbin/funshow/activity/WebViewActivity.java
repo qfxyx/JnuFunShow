@@ -30,8 +30,8 @@ import liangbin.funshow.R;
  * Created by Administrator on 2015/8/1.
  */
 public class WebViewActivity extends Activity {
-     private WebView webView;
-     private Intent intent;
+     public WebView webView;
+     public Intent intent;
     private ValueCallback<Uri> myUploadMessage;
     private ProgressBar progressBar;
     private TextView textView;

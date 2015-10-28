@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.LinksData;
 import liangbin.funshow.manage.MyApplication;
 import liangbin.funshow.manage.NetworkStatus;
 
@@ -117,7 +118,7 @@ public class ScoreQueryActivity extends Activity {
                     parseScores();
                     progressDialog.dismiss();
                     if (stringsNeeds[0]!=null&&stringsNeeds[0]!=null&&stringsLefts[0]!=null){
-                        textView.setText(stringBuilder);
+                        //textView.setText(stringBuilder);
                         String sendString=stringBuilder.toString();
                         NeedValidateCode=1;
                         Intent intent=new Intent(ScoreQueryActivity.this,ShowResultsActivity.class);
@@ -243,11 +244,12 @@ public class ScoreQueryActivity extends Activity {
 
         //TestButton
         Button button=(Button)findViewById(R.id.score_test_button);
+        button.setVisibility(View.INVISIBLE);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //testpost();
-                textView.setText(stringBuilder);
+               // textView.setText(stringBuilder);
             }
         });
 
@@ -260,7 +262,7 @@ public class ScoreQueryActivity extends Activity {
                 try {
                     httpClient=new DefaultHttpClient();
 
-                    HttpGet httpGet=new HttpGet("http://202.116.0.176/ValidateCode.aspx");
+                    HttpGet httpGet=new HttpGet(LinksData.teaching_system_pic);
                     HttpParams httpParams =new BasicHttpParams();
                     HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
                     HttpConnectionParams.setSoTimeout(httpParams, 3000);
@@ -275,7 +277,7 @@ public class ScoreQueryActivity extends Activity {
                     Message message=new Message();
                     message.what=SHOW_VALIDATEPIC;
                     handler.sendMessage(message);
-                    HttpGet httpGet0=new HttpGet("http://202.116.0.176/");
+                    HttpGet httpGet0=new HttpGet(LinksData.teaching_system);
                     HttpResponse httpResponse0= httpClient.execute(httpGet0);
                     HttpEntity httpEntity0=httpResponse0.getEntity();
                     String string0=EntityUtils.toString(httpEntity0);
@@ -318,7 +320,7 @@ public class ScoreQueryActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    HttpGet httpGet=new HttpGet("http://202.116.0.176/ValidateCode.aspx");
+                    HttpGet httpGet=new HttpGet(LinksData.teaching_system_pic);
                     HttpParams httpParams =new BasicHttpParams();
                     HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
                     HttpConnectionParams.setSoTimeout(httpParams, 3000);
@@ -357,7 +359,7 @@ public class ScoreQueryActivity extends Activity {
                 editor.commit();
 
                 String getValidateCode=validateCode.getText().toString();
-                HttpPost httpPost=new HttpPost("http://202.116.0.176/Login.aspx");
+                HttpPost httpPost=new HttpPost(LinksData.teaching_system_logIn);
                 HttpResponse httpResponse;
                 List<NameValuePair>params=new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("__VIEWSTATE",VIEWSTATE));
@@ -384,7 +386,7 @@ public class ScoreQueryActivity extends Activity {
                     httpPost.setEntity(new UrlEncodedFormEntity(params,"UTF-8"));
                     httpResponse=httpClient.execute(httpPost);
                     httpClient.execute(httpPost);
-                    HttpGet httpGet=new HttpGet("http://202.116.0.176/default.aspx");
+                    HttpGet httpGet=new HttpGet(LinksData.teaching_system_defaultPage);
                     httpResponse=httpClient.execute(httpGet);
                     HttpEntity httpEntity=httpResponse.getEntity();
                     String results=EntityUtils.toString(httpEntity);

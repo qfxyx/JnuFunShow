@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.LinksData;
 
 /**
  * Created by Administrator on 2015/9/17.
@@ -43,8 +44,7 @@ public class NotificationCampusActivity extends Activity {
     private HttpClient httpClient;
     private final int RETURN_HTML=1;
     private final int CONNECT_TIMEOUT=2;
-    private final String comprehensiveLink="http://www.jnu.edu.cn/jnu2014/" +
-            "article_list.asp?channelID=5037";
+    private final String comprehensiveLink= LinksData.notification_comprehensive2;
     ProgressDialog progressDialog;
 
     Integer select1=0;
@@ -89,10 +89,11 @@ public class NotificationCampusActivity extends Activity {
                                 link=link.replace("教务处","%BD%CC%CE%F1%B4%A6").
                                         replace("通知", "%CD%A8%D6%AA");
                                 Intent intent=new Intent(NotificationCampusActivity.this,
-                                        WebViewActivity.class);
+                                       ShowTeachStudentNotifiActivity.class);
                                 intent.putExtra("links","http://www.jnu.edu.cn/" +
                                         "jnu2014/content.asp?newsPath=1/W_5037_"+link);
                                 intent.putExtra("what","showToast");
+                                intent.putExtra("notificationTitle",titles[position+1]);
                                 intent.putExtra("title","校内通知");
                                 intent.putExtra("whatMsg","本页面来自暨大官网，未经优化，" +
                                         "请自行缩放屏幕以适应手机");
@@ -141,8 +142,7 @@ public class NotificationCampusActivity extends Activity {
             public void run() {
                 try{
                     httpClient=new DefaultHttpClient();
-                    HttpGet httpGet=new HttpGet("http://www.jnu.edu.cn" +
-                            "/pub/channel/channel_5037_20_1.xml");
+                    HttpGet httpGet=new HttpGet(comprehensiveLink);
                     HttpParams httpParams =new BasicHttpParams();
                     HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
                     HttpConnectionParams.setSoTimeout(httpParams, 3000);

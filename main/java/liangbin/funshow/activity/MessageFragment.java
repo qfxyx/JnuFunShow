@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.LinksData;
 import liangbin.funshow.manage.NetworkStatus;
 
 /**
@@ -31,9 +32,7 @@ public class MessageFragment extends android.support.v4.app.Fragment {
     private SimpleAdapter simpleAdapter;
     List<Map<String,Object>> listItems;
 
-    private final String repairWebsite="http://zhzw.jnu.edu.cn/zhzw/website/repair/" +
-            "index.php?openid=of_zzt1lz_r4E71dG4xULBCtt6IY";
-    private final String jnuNews="http://news.jnu.edu.cn/";
+    private final String jnuNews= LinksData.jnuNews;
 
 
     public MessageFragment() {

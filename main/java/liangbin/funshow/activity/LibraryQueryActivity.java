@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.LinksData;
 import liangbin.funshow.manage.NetworkStatus;
 
 public class LibraryQueryActivity extends Activity {
@@ -241,8 +242,7 @@ public class LibraryQueryActivity extends Activity {
                 NetworkStatus networkStatus=new NetworkStatus(LibraryQueryActivity.this);
                 if (networkStatus.canConntect()){
                     Intent intent=new Intent(LibraryQueryActivity.this,WebViewActivity.class);
-                    intent.putExtra("links","http://202.116.13.3:8080/sms/opac/" +
-                            "search/showSearch.action?xc=6");
+                    intent.putExtra("links", LinksData.lib_findBooks);
                     intent.putExtra("what"," ");
                     intent.putExtra("whatMsg","");
                     intent.putExtra("title","馆藏查询");
@@ -261,7 +261,7 @@ public class LibraryQueryActivity extends Activity {
                 HttpClient httpClient=new DefaultHttpClient();
                 HttpResponse httpResponse;
                 try {
-                HttpPost httpPost=new HttpPost("http://202.116.13.244/patroninfo*chx");
+                HttpPost httpPost=new HttpPost(LinksData.lib_logIn);
                 HttpParams httpParams=new BasicHttpParams();
                 HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
                 HttpConnectionParams.setSoTimeout(httpParams, 3000);
@@ -273,8 +273,7 @@ public class LibraryQueryActivity extends Activity {
 
                     httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
                     httpClient.execute(httpPost);
-                    HttpGet httpGet=new HttpGet("http://202.116.13.244/patronin" +
-                            "fo~S1*chx/1094279/readinghistory");
+                    HttpGet httpGet=new HttpGet(LinksData.lib_history);
                     HttpParams httpParamsGet=new BasicHttpParams();
                     HttpConnectionParams.setConnectionTimeout(httpParamsGet, 3000);
                     HttpConnectionParams.setSoTimeout(httpParamsGet, 3000);
@@ -305,7 +304,7 @@ public class LibraryQueryActivity extends Activity {
             public void run() {
                 HttpClient httpClient=new DefaultHttpClient();
                 HttpResponse httpResponse;
-                HttpPost httpPost=new HttpPost("http://202.116.13.244/patroninfo*chx");
+                HttpPost httpPost=new HttpPost(LinksData.lib_logIn);
                 List<NameValuePair> params=new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("code",getNum));
                 params.add(new BasicNameValuePair("name",getName));
@@ -316,8 +315,7 @@ public class LibraryQueryActivity extends Activity {
                     httpPost.setParams(httpParams);
                     httpPost.setEntity(new UrlEncodedFormEntity(params,"UTF-8"));
                     httpClient.execute(httpPost);
-                    HttpGet httpGet=new HttpGet("http://202.116.13.244/patron" +
-                            "info~S1*chx/1094113/items");
+                    HttpGet httpGet=new HttpGet(LinksData.lib_lendItems);
                     HttpParams httpParamsGet=new BasicHttpParams();
                     HttpConnectionParams.setConnectionTimeout(httpParamsGet, 3000);
                     HttpConnectionParams.setSoTimeout(httpParamsGet, 3000);

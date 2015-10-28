@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.LinksData;
 
 
 /**
@@ -44,8 +45,7 @@ public class NotificationTeachingActivity extends Activity{
     private HttpClient httpClient;
     private final int RETURN_HTML=1;
     private final int CONNECT_TIMEOUT=2;
-    private final String teachingLink="http://jwc.jnu.edu.cn/SmallClass_index.asp?" +
-            "SmallClassName=%CD%A8%D6%AA&BigClassName=%BD%CC%CE%F1%B4%A6";
+    private final String teachingLink= LinksData.notification_teaching;
     ProgressDialog progressDialog;
 
     Integer select1=0;
@@ -87,8 +87,9 @@ public class NotificationTeachingActivity extends Activity{
                                 link=link.replace("教务处","%BD%CC%CE%F1%B4%A6").
                                         replace("通知", "%CD%A8%D6%AA");
                                 Intent intent=new Intent(NotificationTeachingActivity.this,
-                                        WebViewActivity.class);
+                                        ShowTeachStudentNotifiActivity.class);
                                 intent.putExtra("links","http://jwc.jnu.edu.cn/"+link);
+                                intent.putExtra("notificationTitle",titles[position]);
                                 intent.putExtra("what","showToast");
                                 intent.putExtra("title","教务处通知");
                                 intent.putExtra("whatMsg","本页面来自暨大教务处，未经优化，" +

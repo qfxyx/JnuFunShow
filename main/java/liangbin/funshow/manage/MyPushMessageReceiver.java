@@ -68,9 +68,9 @@ public class MyPushMessageReceiver extends BroadcastReceiver{
                         PendingIntent.FLAG_UPDATE_CURRENT);//最后一个参数表示更新intent的数据到
                         // pendingIntent中
 
-                    Toast.makeText(MyApplication.getContext(),title+content+link,Toast.LENGTH_LONG).show();
+                    //Toast.makeText(MyApplication.getContext(),title+content+link,Toast.LENGTH_LONG).show();
                 Notification  notification=new Notification.Builder(context).setAutoCancel(true)
-                        .setTicker("Funshow有新消息啦！").setSmallIcon(R.mipmap.ic_launcher)
+                        .setTicker("Funshow有新消息啦！").setSmallIcon(R.mipmap.funshow_logo)
                         .setContentTitle(title).setContentText(content).setContentIntent
                                 (pendingIntent).build();
                 nm.notify(123,notification);

@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.LinksData;
 import liangbin.funshow.manage.MyApplication;
 import liangbin.funshow.manage.NetworkStatus;
 
@@ -168,7 +169,7 @@ public class CampusNetActivity extends Activity {
             public void run() {
 
                 httpClient=new DefaultHttpClient();
-                HttpPost httpPost= new HttpPost("http://netcweb.jnu.edu.cn/renew/login.asp");
+                HttpPost httpPost= new HttpPost(LinksData.CampusNet);
                 //设置连接超时
                 HttpParams httpParams=new BasicHttpParams();
                 HttpConnectionParams.setConnectionTimeout(httpParams,3000);

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.LinksData;
 import liangbin.funshow.manage.NetworkStatus;
 import liangbin.funshow.manage.TitleListAdapter;
 import liangbin.funshow.manage.TitleListView;
@@ -26,15 +27,10 @@ public class FunshowFragment extends android.support.v4.app.Fragment {
 
     private List<TitleListView> titleList=new ArrayList<TitleListView>();
     TitleListAdapter adapter;
-    private final String funshowHogepage="http://bbs.jnustu.org/";
-    private final String CampusTrends1="http://bbs.jnustu.org/forum.php?" +
-                                         "mod=forumdisplay&fid=5";
-    private final String JobMarket= "http://wsq.discuz.qq.com/?" +
-            "c=index&a=index&f=wx&fid=18&siteid=265049098";
-    private final String SecondHand= "http://wsq.discuz.qq.com/?" +
-            "c=index&a=index&f=wx&fid=77&siteid=265049098";
-    private final  String CampusTrends="http://wsq.discuz.qq.com/?" +
-            "siteid=265049098&c=index&a=index&mobile=2";
+    private final String funshowHogepage= LinksData.funshowHogepage;
+    private final String JobMarket= LinksData.JobMarket;
+    private final String SecondHand= LinksData.SecondHand;
+    private final  String CampusTrends=LinksData.CampusTrends;
 
     public FunshowFragment() {
         // Required empty public constructor

@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.LinksData;
 
 /**
  * Created by Administrator on 2015/9/11.
@@ -42,7 +43,7 @@ public class NotificationStudentActivity extends Activity {
     private HttpClient httpClient;
     private final int RETURN_HTML=1;
     private final int CONNECT_TIMEOUT=2;
-    private  final String studentLink="http://xsc.jnu.edu.cn/list.aspx?cid=6";
+    private  final String studentLink= LinksData.notification_students;
     ProgressDialog progressDialog;
     Integer select1=0;
     Integer select2=0;
@@ -78,8 +79,9 @@ public class NotificationStudentActivity extends Activity {
                                                     int position, long id) {
                                 String link=links[position];
                                 Intent intent=new Intent(NotificationStudentActivity.this,
-                                        WebViewActivity.class);
+                                     ShowTeachStudentNotifiActivity.class);
                                 intent.putExtra("links","http://xsc.jnu.edu.cn/"+link);
+                                intent.putExtra("notificationTitle",titles[position]);
                                 intent.putExtra("what","showToast");
                                 intent.putExtra("title","学生处通知");
                                 intent.putExtra("whatMsg","本页面来自暨大学生处，未经优化，" +

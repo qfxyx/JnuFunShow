@@ -51,6 +51,7 @@ import java.util.TimeZone;
 
 import liangbin.funshow.R;
 import liangbin.funshow.manage.FunShowDatabaseHelper;
+import liangbin.funshow.manage.LinksData;
 import liangbin.funshow.manage.MyApplication;
 import liangbin.funshow.manage.NetworkStatus;
 
@@ -481,7 +482,7 @@ public class ClassScheduleActivity extends Activity {
                 try {
                     httpClient=new DefaultHttpClient();
 
-                    HttpGet httpGet=new HttpGet("http://202.116.0.176/ValidateCode.aspx");
+                    HttpGet httpGet=new HttpGet(LinksData.teaching_system_pic);
                     HttpParams httpParams =new BasicHttpParams();
                     HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
                     HttpConnectionParams.setSoTimeout(httpParams, 3000);
@@ -496,7 +497,7 @@ public class ClassScheduleActivity extends Activity {
                     Message message=new Message();
                     message.what=SHOW_VALIDATEPIC;
                     handler.sendMessage(message);
-                    HttpGet httpGet0=new HttpGet("http://202.116.0.176/");
+                    HttpGet httpGet0=new HttpGet(LinksData.teaching_system);
                     HttpResponse httpResponse0= httpClient.execute(httpGet0);
                     HttpEntity httpEntity0=httpResponse0.getEntity();
                     String string0=EntityUtils.toString(httpEntity0);
@@ -541,7 +542,7 @@ public class ClassScheduleActivity extends Activity {
                 @Override
                 public void run() {
                     try {
-                        HttpGet httpGet = new HttpGet("http://202.116.0.176/ValidateCode.aspx");
+                        HttpGet httpGet = new HttpGet(LinksData.teaching_system_pic);
                         HttpParams httpParams =new BasicHttpParams();
                         HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
                         HttpConnectionParams.setSoTimeout(httpParams, 3000);
@@ -571,7 +572,7 @@ public class ClassScheduleActivity extends Activity {
             public void run() {
 
                 String getValidateCode=validateCode.getText().toString();
-                HttpPost httpPost=new HttpPost("http://202.116.0.176/Login.aspx");
+                HttpPost httpPost=new HttpPost(LinksData.teaching_system_logIn);
                 HttpResponse httpResponse;
                 List<NameValuePair> params=new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("__VIEWSTATE",VIEWSTATE));
@@ -602,8 +603,8 @@ public class ClassScheduleActivity extends Activity {
                     String results=EntityUtils.toString(httpEntity);
                     Document document=Jsoup.parse(results);
                     String ifLogIn=document.getElementsByTag("title").get(0).text();
-                    HttpResponse getName=httpClient.execute(new HttpGet("http://202.116.0.176/" +
-                            "areaTopLogo.aspx"));
+                    // get the name
+                    HttpResponse getName=httpClient.execute(new HttpGet(LinksData.teaching_system_getName));
                     String nams=EntityUtils.toString(getName.getEntity());
                     Document docName=Jsoup.parse(nams);
                     Elements eles=docName.select("#header_lblXM");
@@ -630,8 +631,7 @@ public class ClassScheduleActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                HttpGet httpGet=new HttpGet("http://202.116.0.176/Secure/" +
-                        "PaiKeXuanKe/wfrm_xk_StudentKcb.aspx");
+                HttpGet httpGet=new HttpGet(LinksData.teaching_system_getTimetable);
 
                 try{
                     HttpParams httpParams =new BasicHttpParams();
@@ -661,8 +661,7 @@ public class ClassScheduleActivity extends Activity {
                     String dlstXndZ="2015-2016";
                     String dlstXndZ0="2015-2016";
 
-                    HttpPost httpPost=new HttpPost("http://202.116.0.176/Secure/PaiKeXuanKe/" +
-                            "wfrm_xk_StudentKcb.aspx");
+                    HttpPost httpPost=new HttpPost(LinksData.teaching_system_getTimetable);
                     HttpResponse httpResponse;
                     List<NameValuePair> params=new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair("__EVENTARGUMENT",EVENTARGUMENT));
@@ -680,8 +679,7 @@ public class ClassScheduleActivity extends Activity {
                     httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
                     httpPost.addHeader("User-Agent", "Mozilla/5.0 (Windows " +
                             "NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-                    httpPost.setHeader("Referer", "http://202.116.0.176/" +
-                            "Secure/PaiKeXuanKe/wfrm_xk_StudentKcb.aspx");
+                    httpPost.setHeader("Referer", LinksData.teaching_system_getTimetable);
                     httpPost.setEntity(new UrlEncodedFormEntity(params, "gbk"));
                     HttpParams httpParamsPOST =new BasicHttpParams();
                     HttpConnectionParams.setConnectionTimeout(httpParamsPOST, 3000);
@@ -714,8 +712,7 @@ public class ClassScheduleActivity extends Activity {
                                 "t=100&ReloadDocMap=true&SearchStartPage=0&LinkTarget=_top";
 
                         HttpGet httpGetResults=new HttpGet(part1+part2.replace("%3d","=")+part3);
-                        httpGetResults.setHeader("Referer","http://202.116.0.176/Secure/" +
-                                "PaiKeXuanKe/wfrm_xk_StudentKcb.aspx");
+                        httpGetResults.setHeader("Referer",LinksData.teaching_system_getTimetable);
                         //test="4";
                         HttpResponse hpptresponse2=httpClient.execute(httpGetResults);
                         test="5";
@@ -841,8 +838,7 @@ public class ClassScheduleActivity extends Activity {
                         Log.i(TAG,"parse html finish");
                     }
 
-                    HttpPost httpPostExam=new HttpPost("http://202.116.0.176/Secure/PaiKeXuanKe/" +
-                            "wfrm_xk_StudentKcb.aspx");
+                    HttpPost httpPostExam=new HttpPost(LinksData.teaching_system_getTimetable);
                     List<NameValuePair> paramsExam=new ArrayList<NameValuePair>();
                     paramsExam.add(new BasicNameValuePair("__EVENTARGUMENT",EVENTARGUMENT));
                     paramsExam.add(new BasicNameValuePair("__EVENTTARGET",EVENTTARGET));
@@ -860,8 +856,7 @@ public class ClassScheduleActivity extends Activity {
                     httpPostExam.addHeader("Content-Type", "application/x-www-form-urlencoded");
                     httpPostExam.addHeader("User-Agent","Mozilla/5.0 (Windows " +
                             "NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-                    httpPostExam.setHeader("Referer", "http://202.116.0.176/" +
-                            "Secure/PaiKeXuanKe/wfrm_xk_StudentKcb.aspx");
+                    httpPostExam.setHeader("Referer", LinksData.teaching_system_getTimetable);
                     httpPostExam.setEntity(new UrlEncodedFormEntity(paramsExam,"gbk"));
                     HttpResponse httpResponseExam= httpClient.execute(httpPostExam);
                     returnCode=httpResponseExam.getStatusLine().getStatusCode();
@@ -887,8 +882,7 @@ public class ClassScheduleActivity extends Activity {
                                 "t=100&ReloadDocMap=true&SearchStartPage=0&LinkTarget=_top";
 
                         HttpGet httpGetResults=new HttpGet(part1+part2.replace("%3d","=")+part3);
-                        httpGetResults.setHeader("Referer","http://202.116.0.176/Secure/" +
-                                "PaiKeXuanKe/wfrm_xk_StudentKcb.aspx");
+                        httpGetResults.setHeader("Referer",LinksData.teaching_system_getTimetable);
                         test="6";
                         HttpResponse hpptresponseExam2=httpClient.execute(httpGetResults);
                         test="7";

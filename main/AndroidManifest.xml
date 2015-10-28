@@ -25,15 +25,19 @@
         android:icon="@drawable/funshow"
         android:label="@string/app_name" >
         <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Holo" >
+            android:name=".activity.WlecomeActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+        android:name=".activity.MainActivity"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Holo" >
+    </activity>
 
         <activity android:name=".activity.MessageActivity" >
         </activity>
@@ -103,6 +107,10 @@
         <activity
             android:theme="@style/Base.Theme.AppCompat.Light"
             android:name=".activity.TestActivity">
+        </activity>
+        <activity
+            android:theme="@style/Base.Theme.AppCompat.Light"
+            android:name=".activity.ShowTeachStudentNotifiActivity">
         </activity>
 
         <activity

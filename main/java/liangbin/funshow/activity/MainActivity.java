@@ -1,12 +1,8 @@
 package liangbin.funshow.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -19,16 +15,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.Toast;
-
-import java.net.URL;
-import java.util.ArrayList;
 
 import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
@@ -37,40 +23,44 @@ import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import liangbin.funshow.R;
 
+import liangbin.funshow.manage.FSAppInstallation;
 import liangbin.funshow.manage.FunShowDatabaseHelper;
-import liangbin.funshow.manage.Installation;
+import liangbin.funshow.manage.LinksData;
 import liangbin.funshow.manage.ViewPageAdapter;
 
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
 
-    private  FunShowDatabaseHelper databaseHelper;
-        private ViewPager mViewpager;
-        private static ViewPageAdapter mAdapter;
-      SharedPreferences sharedPreferences;
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
+
+    private FunShowDatabaseHelper databaseHelper;
+    private ViewPager mViewpager;
+    private static ViewPageAdapter mAdapter;
+    SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         //初始化Bmob后台SDK
-        Bmob.initialize(this,"eef972e5434ea66032413a0268c13912");
+        Bmob.initialize(this, LinksData.bmobAppKey);
         // 使用推送服务时的初始化操作
         BmobInstallation.getCurrentInstallation(this).save();
         // 启动推送服务
-        BmobPush.startWork(this, "eef972e5434ea66032413a0268c13912");
+        BmobPush.startWork(this, LinksData.bmobAppKey);
 
         sendDeviceMessage();
+
 
         //开始要先创建viewpager和adapter对象，并且要用viewpager的
         //setadapter初始化，否则会发生空指针异常
 
-        mAdapter=new ViewPageAdapter(getSupportFragmentManager());
-        mViewpager=(ViewPager)findViewById(R.id.viewPager);
+        mAdapter = new ViewPageAdapter(getSupportFragmentManager());
+        mViewpager = (ViewPager) findViewById(R.id.viewPager);
         mViewpager.setAdapter(mAdapter);
 
-       final ActionBar actionBar = getActionBar();
-       // actionBar.setDisplayShowTitleEnabled(false);
+        final ActionBar actionBar = getActionBar();
+        // actionBar.setDisplayShowTitleEnabled(false);
         //actionBar.setDisplayUseLogoEnabled(false);
         //actionBar.setDisplayShowHomeEnabled(false);
         // 设置ActionBar的导航方式：Tab导航
@@ -79,16 +69,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
         // 依次添加三个Tab页，并为三个Tab标签添加事件监听器
         ActionBar.Tab tabFunshow = actionBar.newTab();
-        tabFunshow.setText("FunShow" );
+        tabFunshow.setText("FunShow");
         tabFunshow.setTabListener(this);
         actionBar.addTab(tabFunshow);
 
-        ActionBar.Tab  tabMessage= actionBar.newTab();
+        ActionBar.Tab tabMessage = actionBar.newTab();
         tabMessage.setText("信息港湾");
         tabMessage.setTabListener(this);
         actionBar.addTab(tabMessage);
 
-        ActionBar.Tab Discovery =actionBar.newTab();
+        ActionBar.Tab Discovery = actionBar.newTab();
         Discovery.setText("发现");
         Discovery.setTabListener(this);
         actionBar.addTab(Discovery);
@@ -98,17 +88,19 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         initDatabase();
 
     }
-    private void setUpViewPager(){
 
-        mViewpager.setOnPageChangeListener(new  ViewPager.SimpleOnPageChangeListener(){
+    private void setUpViewPager() {
+
+        mViewpager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
-        public void onPageSelected(int position){
+            public void onPageSelected(int position) {
                 final ActionBar actionBar = getActionBar();
                 actionBar.setSelectedNavigationItem(position);
             }
+
             @Override
-        public void onPageScrollStateChanged(int state){
-                switch(state){
+            public void onPageScrollStateChanged(int state) {
+                switch (state) {
                     case ViewPager.SCROLL_STATE_IDLE:
                         //TODO
                         break;
@@ -127,12 +119,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     @Override
-    public boolean onKeyDown(int keyCode,KeyEvent event){
-        if((keyCode==KeyEvent.KEYCODE_BACK)){
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             moveTaskToBack(false);
             return true;
         }
-        return super.onKeyDown(keyCode,event);
+        return super.onKeyDown(keyCode, event);
 
     }
 
@@ -141,22 +133,22 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                                 FragmentTransaction fragmentTransaction) {
 
     }
+
     @Override
-    public void onTabSelected(ActionBar.Tab tab,FragmentTransaction fragmentTransaction) {
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         mViewpager.setCurrentItem(tab.getPosition());
     }
+
     @Override
     public void onTabReselected(ActionBar.Tab tab,
-                                FragmentTransaction fragmentTransaction)
-    {
+                                FragmentTransaction fragmentTransaction) {
     }
-
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-       getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
 
     }
@@ -172,70 +164,86 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         if (id == R.id.action_settings) {
             return true;
         }
-        if (id==R.id.back_key){
+        if (id == R.id.back_key) {
             finish();
         }
 
         return super.onOptionsItemSelected(item);
 
     }
-    private void initDatabase(){
-        databaseHelper=new FunShowDatabaseHelper(this,"FunShow.db",null,2);
+
+    private void initDatabase() {
+        databaseHelper = new FunShowDatabaseHelper(this, "FunShow.db", null, 2);
         databaseHelper.getWritableDatabase();
     }
 
-    private void sendDeviceMessage(){
-        sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this);
-        editor=sharedPreferences.edit();
-        boolean isFirst=sharedPreferences.getBoolean("install_is_first",true);
-        String modle=Build.MODEL;
-        String version=Build.VERSION.RELEASE;
-        String manufactureru=Build.MANUFACTURER;
-        TelephonyManager telephonyManager=(TelephonyManager)
+    private void sendDeviceMessage() {
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = sharedPreferences.edit();
+        boolean isFirst = sharedPreferences.getBoolean("install_is_first", true);
+        String modle = Build.MODEL;
+        String version = Build.VERSION.RELEASE;
+        String manufactureru = Build.MANUFACTURER;
+        TelephonyManager telephonyManager = (TelephonyManager)
                 getSystemService(Context.TELEPHONY_SERVICE);
-        String phoneId=telephonyManager.getDeviceId();
-        Toast.makeText(this,phoneId,Toast.LENGTH_LONG).show();
-        final Installation installation=new Installation();
-        if(isFirst){
+
+        String phoneId = telephonyManager.getDeviceId();
+        String phoneNum = telephonyManager.getLine1Number();
+
+        //Toast.makeText(this,phoneId,Toast.LENGTH_LONG).show();
+        final FSAppInstallation installation = new FSAppInstallation();
+        if (isFirst) {
             installation.setDeviceName(modle);
             installation.setDeviceVersion(version);
-            installation.setManufacturer(manufactureru);
+            installation.setDevicesManu(manufactureru);
             installation.setDeviceId(phoneId);
+            installation.setPhoneNum(phoneNum);
+            installation.setUseTimes(sharedPreferences.getInt("fs_app_use_time", 1));
             installation.save(this, new SaveListener() {
                 @Override
                 public void onSuccess() {
 
-                   String id=installation.getObjectId();
-                    editor.putString("DeviceId",id);
-                    editor.putBoolean("install_is_first",false);
+                    String id = installation.getObjectId();
+                    editor.putString("FS_DeviceId", id);
+                    editor.putBoolean("install_is_first", false);
+                    editor.putInt("fs_app_use_time", 1);
+                    // Toast.makeText(MainActivity.this,"成功",Toast.LENGTH_LONG).show();
+
                     editor.commit();
                 }
 
                 @Override
                 public void onFailure(int i, String s) {
+                    //Toast.makeText(MainActivity.this,"失败",Toast.LENGTH_LONG).show();
 
                 }
             });
 
-        }else {
+        } else {
             installation.setDeviceVersion(version);
             installation.setDeviceId(phoneId);
-            installation.update(this, sharedPreferences.getString("DeviceId", ""),
+            installation.setPhoneNum(phoneNum);
+            installation.setUseTimes(sharedPreferences.getInt("fs_app_use_time", 1) + 1);
+            installation.update(this, sharedPreferences.getString("FS_DeviceId", ""),
                     new UpdateListener() {
-                @Override
-                public void onSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            editor.putInt("fs_app_use_time", sharedPreferences.getInt("fs_app_use_time", 1) + 1);
+                            editor.commit();
 
-                }
+                        }
 
-                @Override
-                public void onFailure(int i, String s) {
+                        @Override
+                        public void onFailure(int i, String s) {
+                            editor.putInt("fs_app_use_time", sharedPreferences.getInt("fs_app_use_time", 1) + 1);
+                            editor.commit();
 
-                }
-            });
+                        }
+                    });
 
         }
 
 
     }
-
 }

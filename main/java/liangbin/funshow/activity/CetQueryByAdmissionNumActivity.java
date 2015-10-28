@@ -27,6 +27,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.LinksData;
 import liangbin.funshow.manage.NetworkStatus;
 
 /**
@@ -147,7 +148,7 @@ public class CetQueryByAdmissionNumActivity extends Activity {
                 String results = "";
 
                 try {
-                    URL url = new URL("http://cet.99sushe.com/find");
+                    URL url = new URL(LinksData.cet_99shuse);
                     URLConnection connection = url.openConnection();
                     connection.setConnectTimeout(3000);
                     connection.setRequestProperty("User-Agent", " Mozilla/5.0 " +

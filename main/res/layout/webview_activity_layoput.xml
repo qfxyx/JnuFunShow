@@ -24,7 +24,7 @@
                 android:id="@+id/webView_back_button"
                 android:layout_width="40dp"
                 android:layout_height="35dp"
-                android:background="@drawable/back_button"
+                android:background="@drawable/back_new"
 
                 />
             <Button
@@ -34,7 +34,7 @@
                 android:layout_height="35dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
-                android:background="@drawable/forword"/>
+                android:background="@drawable/forword_new"/>
             <TextView
                 android:layout_gravity="center"
                 android:gravity="center"

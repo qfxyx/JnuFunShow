@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.LinksData;
 import liangbin.funshow.manage.NetworkStatus;
 
 /**
@@ -188,7 +189,7 @@ public class CetQueryActivity extends Activity{
         new Thread(new Runnable() {
             @Override
             public void run() {
-                HttpGet httpGet0=new HttpGet("http://cet.jnu.edu.cn/cet/cj_research.aspx");
+                HttpGet httpGet0=new HttpGet(LinksData.jun_cet);
                 try {
                     HttpParams httpParams= new BasicHttpParams();
                     HttpConnectionParams.setConnectionTimeout(httpParams,3000);
@@ -243,7 +244,7 @@ public class CetQueryActivity extends Activity{
                     HttpParams httpParams=new BasicHttpParams();
                     HttpConnectionParams.setConnectionTimeout(httpParams,3000);
                     HttpConnectionParams.setSoTimeout(httpParams,3000);
-                    HttpPost httpPost=new HttpPost("http://cet.jnu.edu.cn/cet/cj_research.aspx");
+                    HttpPost httpPost=new HttpPost(LinksData.jun_cet);
                     httpPost.setParams(httpParams);
                     List<NameValuePair> params =new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair("TextBox2",Idcard));

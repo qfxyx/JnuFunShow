@@ -23,12 +23,7 @@ public class NotificationActivity extends Activity {
     private List<TitleListView> notificationList=new ArrayList<TitleListView>();
     private TitleListAdapter adapter;
     private ListView listView;
-    private final String teachingLink="http://jwc.jnu.edu.cn/SmallClass_index.asp?" +
-            "SmallClassName=%CD%A8%D6%AA&BigClassName=%BD%CC%CE%F1%B4%A6";
-    private final String studentsLink="http://xsc.jnu.edu.cn/list.aspx?cid=6";
-    private final String comprehensiveLink="http://www.jnu.edu.cn/jnu2014/" +
-            "article_list.asp?channelID=5037";
-    private String Test="http://www.tudou.com/";
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import liangbin.funshow.R;
+import liangbin.funshow.manage.LinksData;
 import liangbin.funshow.manage.NetworkStatus;
 
 /**
@@ -29,12 +30,13 @@ public class DiscoveryFragment extends Fragment {
     int[]images={R.mipmap.discovery_fs_uodate,R.mipmap.discovery_message_board,
             R.mipmap.discovery_school_bus, R.mipmap.discovery_campus_map,
             R.mipmap.discovery_games};
+
     int ForwardPic=R.mipmap.turn_right;
-    String JnuBoard="http://1.funshow.sinaapp.com/messageboard/w/";
-    String busTimatable="http://1.funshow.sinaapp.com/bus/";
-    String games="http://1.funshow.sinaapp.com/game/index.php";
-    String funshowHis=" http://1.funshow.sinaapp.com/history/index.html";
-    String schoolMap="http://1.funshow.sinaapp.com/map/map.html";
+    String JnuBoard= LinksData.JnuBoard;
+    String busTimatable=LinksData.busTimatable;
+    String games=LinksData.games;
+    String funshowHis=LinksData.funshowHis;
+    String schoolMap=LinksData.schoolMap;
    // SimpleAdapter simpleAdapter;
     List<Map<String,Object>> listItems1;
     List<Map<String,Object>> listItems2;
@@ -85,9 +87,9 @@ public class DiscoveryFragment extends Fragment {
                         if (networkStatus.canConntect()){
                             Intent intent0=new Intent(getActivity(),WebViewActivity.class);
                             intent0.putExtra("links",funshowHis);
-                            intent0.putExtra("what","");
+                            intent0.putExtra("what","showToast");
                             intent0.putExtra("title","精彩Funhow");
-                            intent0.putExtra("whatMsg","");
+                            intent0.putExtra("whatMsg","获取最新精彩动态，请按右上角的刷新按钮刷新页面");
                             startActivity(intent0);
                         }
                         break;
