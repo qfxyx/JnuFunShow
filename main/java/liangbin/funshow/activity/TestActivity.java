@@ -1,6 +1,7 @@
 package liangbin.funshow.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -130,10 +131,7 @@ public class TestActivity extends Activity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NetworkStatus networkStatus=new NetworkStatus(TestActivity.this);
-                networkStatus.isOK();
-                textView.setText(networkStatus.getNetType());
-
+               startActivity(new Intent(TestActivity.this,PullRefreshActivity.class));
 
             }
         });

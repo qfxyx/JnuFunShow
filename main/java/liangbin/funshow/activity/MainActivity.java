@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
@@ -26,6 +27,7 @@ import liangbin.funshow.R;
 import liangbin.funshow.manage.FSAppInstallation;
 import liangbin.funshow.manage.FunShowDatabaseHelper;
 import liangbin.funshow.manage.LinksData;
+import liangbin.funshow.manage.PreferencesHelper;
 import liangbin.funshow.manage.ViewPageAdapter;
 
 
@@ -35,8 +37,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private FunShowDatabaseHelper databaseHelper;
     private ViewPager mViewpager;
     private static ViewPageAdapter mAdapter;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,8 +179,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     private void sendDeviceMessage() {
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        editor = sharedPreferences.edit();
+        //sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+         final PreferencesHelper sharedPreferences
+                = new PreferencesHelper(this,PreferencesHelper.bmobInfo);
         boolean isFirst = sharedPreferences.getBoolean("install_is_first", true);
         String modle = Build.MODEL;
         String version = Build.VERSION.RELEASE;
@@ -205,12 +206,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 public void onSuccess() {
 
                     String id = installation.getObjectId();
-                    editor.putString("FS_DeviceId", id);
-                    editor.putBoolean("install_is_first", false);
-                    editor.putInt("fs_app_use_time", 1);
+                    sharedPreferences.setString("FS_DeviceId", id);
+                    sharedPreferences.setBoolean("install_is_first", false);
+                    sharedPreferences.setInt("fs_app_use_time", 1);
                     // Toast.makeText(MainActivity.this,"成功",Toast.LENGTH_LONG).show();
 
-                    editor.commit();
                 }
 
                 @Override
@@ -221,6 +221,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             });
 
         } else {
+
             installation.setDeviceVersion(version);
             installation.setDeviceId(phoneId);
             installation.setPhoneNum(phoneNum);
@@ -229,15 +230,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                     new UpdateListener() {
                         @Override
                         public void onSuccess() {
-                            editor.putInt("fs_app_use_time", sharedPreferences.getInt("fs_app_use_time", 1) + 1);
-                            editor.commit();
+                            sharedPreferences.setInt("fs_app_use_time",
+                                    sharedPreferences.getInt("fs_app_use_time", 1) + 1);
 
                         }
 
                         @Override
                         public void onFailure(int i, String s) {
-                            editor.putInt("fs_app_use_time", sharedPreferences.getInt("fs_app_use_time", 1) + 1);
-                            editor.commit();
+                            sharedPreferences.setInt("fs_app_use_time",
+                                    sharedPreferences.getInt("fs_app_use_time", 1) + 1);
 
                         }
                     });

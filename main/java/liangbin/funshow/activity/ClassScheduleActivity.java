@@ -54,6 +54,7 @@ import liangbin.funshow.manage.FunShowDatabaseHelper;
 import liangbin.funshow.manage.LinksData;
 import liangbin.funshow.manage.MyApplication;
 import liangbin.funshow.manage.NetworkStatus;
+import liangbin.funshow.manage.PreferencesHelper;
 
 /**
  * Created by Administrator on 2015/8/30.
@@ -110,8 +111,9 @@ public class ClassScheduleActivity extends Activity {
     String test="not change ";
     String isGetResults;
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    //private SharedPreferences sharedPreferences;
+    //private SharedPreferences.Editor editor;
+    PreferencesHelper preferences=new PreferencesHelper(MyApplication.getContext(),PreferencesHelper.class_schedule);
     int select=0;
     String Myname="同学";
 
@@ -150,17 +152,15 @@ public class ClassScheduleActivity extends Activity {
                     progressDialog1.dismiss();
                     if (response.equals("整体架构"))
                     {
-                    editor=sharedPreferences.edit();
                     if(checkBox.isChecked()){
-                        editor.putString("class_scheduleName",userName);
-                        editor.putString("class_schedulePassword",userPassword);
-                        editor.putBoolean("class_scheduleRemember",true);
+                        preferences.setString("class_scheduleName", userName);
+                        preferences.setString("class_schedulePassword", userPassword);
+                        preferences.setBoolean("class_scheduleRemember", true);
 
                     }else {
-                        editor.clear();
+                       preferences.clearData();
 
                     }
-                    editor.commit();
                    setContentView(R.layout.class_schedule_query);
                     Button buttonQueryAll=(Button)findViewById(R.id.
                             class_schedule_query_all_button);
@@ -368,7 +368,7 @@ public class ClassScheduleActivity extends Activity {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.class_schedule_log_in);
-        Log.i(TAG,"activity created");
+        Log.i(TAG, "activity created");
         getQueryValidateCode();
         logInButton=(Button)findViewById(R.id.class_schedule_log_in_button);
         validateImage=(ImageView)findViewById(R.id.class_schedule_validate_image);
@@ -379,15 +379,15 @@ public class ClassScheduleActivity extends Activity {
         accountNum=(EditText)findViewById(R.id.class_schedule_account);
         password=(EditText)findViewById(R.id.class_schedule_password);
         validateCode=(EditText)findViewById(R.id.class_schedule_validate_code);
-        sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this);
+        //sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this);
         getCurrentTimes();
         databaseHelper=new FunShowDatabaseHelper(this,"FunShow.db",null,2);
         //记住密码
         checkBox=(CheckBox)findViewById(R.id.class_schedule_remember_checkBox);
-        boolean isRemember=sharedPreferences.getBoolean("class_scheduleRemember",false);
+        boolean isRemember=preferences.getBoolean("class_scheduleRemember",false);
         if (isRemember){
-            String getName=sharedPreferences.getString("class_scheduleName","");
-            String getPassword=sharedPreferences.getString("class_schedulePassword","");
+            String getName=preferences.getString("class_scheduleName","");
+            String getPassword=preferences.getString("class_schedulePassword","");
             accountNum.setText(getName);
             password.setText(getPassword);
             checkBox.setChecked(true);
@@ -701,7 +701,7 @@ public class ClassScheduleActivity extends Activity {
                         String id[]=string11.split("%26");
                         String Rid=id[1];
                         String Cid=id[2];
-                        String part1="http://202.116.0.176/Reserved.ReportViewerWebControl.axd?" +
+                        String part1="http://jwxt.jnu.edu.cn/Reserved.ReportViewerWebControl.axd?" +
                                 "Mode=true&";
                         String part2=Rid+"&"+Cid;
                         ;
@@ -871,7 +871,7 @@ public class ClassScheduleActivity extends Activity {
                         String id[]=string11.split("%26");
                         String Rid=id[1];
                         String Cid=id[2];
-                        String part1="http://202.116.0.176/Reserved.ReportViewerWebControl.axd?" +
+                        String part1="http://jwxt.jnu.edu.cn/Reserved.ReportViewerWebControl.axd?" +
                                 "Mode=true&";
                         String part2=Rid+"&"+Cid;
                         ;

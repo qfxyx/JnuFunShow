@@ -43,6 +43,7 @@ import liangbin.funshow.R;
 import liangbin.funshow.manage.LinksData;
 import liangbin.funshow.manage.MyApplication;
 import liangbin.funshow.manage.NetworkStatus;
+import liangbin.funshow.manage.PreferencesHelper;
 
 /**
  * Created by Administrator on 2015/8/18.
@@ -53,8 +54,9 @@ public class CampusNetActivity extends Activity {
     // post datas Button
     Button button;
     CheckBox checkBox;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+   // private SharedPreferences sharedPreferences;
+   // private SharedPreferences.Editor editor;
+    PreferencesHelper preferencesHelper=new PreferencesHelper(MyApplication.getContext(),PreferencesHelper.netInfo);
     EditText numberEditText;
     EditText nameEditText;
     String beginText="若你是学生，人事编号填写你的学号。" +"\n"
@@ -117,16 +119,16 @@ public class CampusNetActivity extends Activity {
         textView=(TextView)findViewById(R.id.net_result_textView);
         button=(Button)findViewById(R.id.net_query_button);
         checkBox=(CheckBox)findViewById(R.id.net_remember_number);
-        sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this);
+        //sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this);
         nameEditText=(EditText)findViewById(R.id.net_name);
         numberEditText=(EditText)findViewById(R.id.net_number);
         textView.setText(beginText);
         TextView textViewTitle=(TextView)findViewById(R.id.activity_title_text);
         textViewTitle.setText("校园网个人信息查询");
-        boolean isRemember=sharedPreferences.getBoolean("NetRemember",false);
+        boolean isRemember=preferencesHelper.getBoolean("NetRemember",false);
         if (isRemember){
-            String storeName=sharedPreferences.getString("NetStoreName","");
-            String storeNum=sharedPreferences.getString("NetStoreNum","");
+            String storeName=preferencesHelper.getString("NetStoreName","");
+            String storeNum=preferencesHelper.getString("NetStoreNum","");
             numberEditText.setText(storeNum);
             nameEditText.setText(storeName);
             checkBox.setChecked(true);
@@ -145,15 +147,13 @@ public class CampusNetActivity extends Activity {
                         Toast.makeText(MyApplication.getContext(),"输入不能留空",
                                 Toast.LENGTH_LONG).show();
                     }else {
-                        editor=sharedPreferences.edit();
                         if (checkBox.isChecked()){
-                            editor.putBoolean("NetRemember",true);
-                            editor.putString("NetStoreName",name);
-                            editor.putString("NetStoreNum",number);
+                            preferencesHelper.setBoolean("NetRemember", true);
+                            preferencesHelper.setString("NetStoreName", name);
+                            preferencesHelper.setString("NetStoreNum", number);
                         }else {
-                            editor.clear();
+                            preferencesHelper.clearData();
                         }
-                        editor.commit();
                         createProgressDialog();
                         queryNetImfo();
                     }

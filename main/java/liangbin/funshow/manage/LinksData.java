@@ -24,15 +24,15 @@ public class LinksData {
     public static String cet_99shuse="http://cet.99sushe.com/find";
 
     //Teaching affair system
-    public static String teaching_system_pic="http://202.116.0.176/ValidateCode.aspx";
-    public static String teaching_system="http://202.116.0.176/";
-    public static String teaching_system_logIn="http://202.116.0.176/Login.aspx";
-    public static String teaching_system_getName="http://202.116.0.176/areaTopLogo.aspx";
-    public static String teaching_system_getTimetable="http://202.116.0.176/Secure/PaiKeXuanKe/" +
+    public static String teaching_system_pic="http://jwxt.jnu.edu.cn/ValidateCode.aspx";
+    public static String teaching_system="http://jwxt.jnu.edu.cn/";
+    public static String teaching_system_logIn="http://jwxt.jnu.edu.cn/Login.aspx";
+    public static String teaching_system_getName="http://jwxt.jnu.edu.cn/areaTopLogo.aspx";
+    public static String teaching_system_getTimetable="http://jwxt.jnu.edu.cn/Secure/PaiKeXuanKe/" +
             "wfrm_xk_StudentKcb.aspx";
-    public static String teaching_system_getGrades="http://202.116.0.176/Secure/" +
+    public static String teaching_system_getGrades="http://jwxt.jnu.edu.cn/Secure/" +
             "Cjgl/Cjgl_Cjcx_WdCj.aspx";
-    public static String teaching_system_defaultPage="http://202.116.0.176/default.aspx";
+    public static String teaching_system_defaultPage="http://jwxt.jnu.edu.cn/default.aspx";
 
     //discovery links
     public static String JnuBoard="http://1.funshow.sinaapp.com/messageboard/w/";
@@ -53,10 +53,10 @@ public class LinksData {
     //Library
     public  static String lib_findBooks="http://202.116.13.3:8080/sms/opac/" +
             "search/showSearch.action?xc=6";
-    public static String lib_logIn="http://202.116.13.244/patroninfo*chx";
-    public static String lib_history="http://202.116.13.244/patronin" +
+    public static String lib_logIn="http://opac.jnu.edu.cn/patroninfo*chx";
+    public static String lib_history="http://opac.jnu.edu.cn/patronin" +
             "fo~S1*chx/1094279/readinghistory";
-    public static String lib_lendItems="http://202.116.13.244/patron" +
+    public static String lib_lendItems="http://opac.jnu.edu.cn/patron" +
             "info~S1*chx/1094113/items";
 
     //Jnu_news

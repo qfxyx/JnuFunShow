@@ -108,6 +108,12 @@
             android:theme="@style/Base.Theme.AppCompat.Light"
             android:name=".activity.TestActivity">
         </activity>
+
+        <activity
+            android:theme="@style/Base.Theme.AppCompat.Light"
+            android:name=".activity.PullRefreshActivity">
+        </activity>
+
         <activity
             android:theme="@style/Base.Theme.AppCompat.Light"
             android:name=".activity.ShowTeachStudentNotifiActivity">
