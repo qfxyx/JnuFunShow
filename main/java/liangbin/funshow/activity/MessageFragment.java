@@ -43,11 +43,9 @@ public class MessageFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         images=new int[]{R.mipmap.jnu_notification,R.mipmap.jnu_news,
                 R.mipmap.jnu_cet_query,R.mipmap.jnu_class_exams,R.mipmap.jnu_finish_scores,
-                R.mipmap.jnu_network,R.mipmap.jnu_library_service,R.mipmap.jnu_scores_query,
-                R.mipmap.ic_launcher};
+                R.mipmap.jnu_network,R.mipmap.jnu_library_service,R.mipmap.jnu_scores_query,};
         names=new String[]{"校内通知","暨南要闻",
-                "四六级查询","课程表和考试表","学分查询","校园网助手","图书馆服务","成绩查询",
-                "Test"};
+                "四六级查询","课程表和考试表","学分查询","校园网助手","图书馆服务","成绩查询",};
         listItems=new ArrayList<Map<String, Object>>();
         for (int i=0;i<names.length;i++){
             Map<String,Object> listItem =new HashMap<String, Object>();
@@ -113,10 +111,12 @@ public class MessageFragment extends android.support.v4.app.Fragment {
                         Intent intent7=new Intent(getActivity(),GradesActivity.class);
                         startActivity(intent7);
                         break;
-                    case 8:
+                   /*
+                   case 8:
                         Intent intent8=new Intent(getActivity(),TestActivity.class);
                         startActivity(intent8);
                         break;
+                   */
                     default:
                         break;
                 }

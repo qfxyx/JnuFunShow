@@ -21,7 +21,7 @@ public class LinksData {
 
     //CET
     public static String jun_cet="http://cet.jnu.edu.cn/cet/cj_research.aspx";
-    public static String cet_99shuse="http://cet.99sushe.com/find";
+    public static String cet_99shuse="http://cet.99sushe.com/findscore";
 
     //Teaching affair system
     public static String teaching_system_pic="http://jwxt.jnu.edu.cn/ValidateCode.aspx";
@@ -42,13 +42,13 @@ public class LinksData {
     public static String schoolMap="http://1.funshow.sinaapp.com/map/map.html";
 
     //Funshow
-    public static String funshowHogepage="http://bbs.jnustu.org/";
-    public static String JobMarket= "http://wsq.discuz.qq.com/?" +
-            "c=index&a=index&f=wx&fid=18&siteid=265049098";
-    public static String SecondHand= "http://wsq.discuz.qq.com/?" +
-            "c=index&a=index&f=wx&fid=77&siteid=265049098";
-    public static  String CampusTrends="http://wsq.discuz.qq.com/?" +
-            "siteid=265049098&c=index&a=index&mobile=2";
+    public static String funshowHogepage="http://funshow.jnu.edu.cn/";
+    public static String JobMarket= "http://wsq.discuz.qq.com/?siteid=265049098&c=" +
+            "index&a=index&fid=149&mobile=2";
+    public static String SecondHand= "http://wsq.discuz.qq.com/?siteid=265049098&c" +
+            "=index&a=index&fid=77&mobile=2";
+    public static  String CampusTrends="http://wsq.discuz.qq.com/?siteid" +
+            "=265049098&c=index&a=index&fid=5&mobile=2";
 
     //Library
     public  static String lib_findBooks="http://202.116.13.3:8080/sms/opac/" +

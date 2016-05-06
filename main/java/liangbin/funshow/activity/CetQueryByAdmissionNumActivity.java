@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -170,6 +171,7 @@ public class CetQueryByAdmissionNumActivity extends Activity {
                     while ((line = in.readLine()) != null) {
                         results +=line;
                     }
+                   // Log.i(".activity.CetQueryByAdmissionNumActivity",results.toString());
                     //根据准考证号第十位判断四六级
                     String[] admissionNumCheck=numEditText.getText().toString().split("");
                     if (admissionNumCheck[10].equals("1")){

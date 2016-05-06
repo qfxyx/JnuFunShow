@@ -116,6 +116,8 @@ public class ClassScheduleActivity extends Activity {
     PreferencesHelper preferences=new PreferencesHelper(MyApplication.getContext(),PreferencesHelper.class_schedule);
     int select=0;
     String Myname="同学";
+    private String schoolYear="2015-2016";
+    private String schoolTerm="第二学期";
 
     private String mYear;
     private String mMonth;
@@ -656,10 +658,10 @@ public class ClassScheduleActivity extends Activity {
                     String btnExpKcb =elements1.select("#btnExpKcb").
                             attr("value");
                     test="3";
-                    String dlstNdxq="第一学期";
-                    String dlstNdxq0="第一学期";
-                    String dlstXndZ="2015-2016";
-                    String dlstXndZ0="2015-2016";
+                    String dlstNdxq=schoolTerm;
+                    String dlstNdxq0=schoolTerm;
+                    String dlstXndZ=schoolYear;
+                    String dlstXndZ0=schoolYear;
 
                     HttpPost httpPost=new HttpPost(LinksData.teaching_system_getTimetable);
                     HttpResponse httpResponse;
